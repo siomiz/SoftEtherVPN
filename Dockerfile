@@ -29,6 +29,6 @@ RUN chmod +x /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
 
-EXPOSE 500/udp 4500/udp
+EXPOSE 500/udp 4500/udp 1701/tcp
 
 CMD ["/opt/vpnserver", "execsvc"]
