@@ -23,6 +23,9 @@ echo
 
 sleep 3
 
+# switch cipher
+/opt/vpncmd localhost /SERVER /CSV /CMD ServerCipherSet DHE-RSA-AES256-SHA
+
 # enable L2TP_IPsec
 /opt/vpncmd localhost /SERVER /CSV /CMD IPsecEnable /L2TP:yes /L2TPRAW:yes /ETHERIP:no /PSK:${PSK} /DEFAULTHUB:DEFAULT
 
