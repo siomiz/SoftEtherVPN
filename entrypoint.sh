@@ -24,8 +24,10 @@ echo
 # while-loop to wait until server comes up
 # switch cipher
 while : ; do
+  set +e
   /opt/vpncmd localhost /SERVER /CSV /CMD ServerCipherSet DHE-RSA-AES256-SHA 2>&1 > /dev/null
   [[ $? -eq 0 ]] && break
+  set -e
   sleep 1
 done
 
@@ -52,6 +54,10 @@ SPW=$(cat /dev/urandom | tr -dc 'A-Za-z0-9' | fold -w 20 | head -n 1)
 /opt/vpnserver stop 2>&1 > /dev/null
 
 # while-loop to wait until server goes away
+set +e
 while pgrep vpnserver > /dev/null; do sleep 1; done
+set -e
+
+echo [initial setup OK]
 
 exec "$@"
