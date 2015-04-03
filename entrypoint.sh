@@ -21,10 +21,13 @@ echo
 
 /opt/vpnserver start 2>&1 > /dev/null
 
-sleep 3
-
+# while-loop to wait until server comes up
 # switch cipher
-/opt/vpncmd localhost /SERVER /CSV /CMD ServerCipherSet DHE-RSA-AES256-SHA
+while : ; do
+  /opt/vpncmd localhost /SERVER /CSV /CMD ServerCipherSet DHE-RSA-AES256-SHA 2>&1 > /dev/null
+  [[ $? -eq 0 ]] && break
+  sleep 1
+done
 
 # enable L2TP_IPsec
 /opt/vpncmd localhost /SERVER /CSV /CMD IPsecEnable /L2TP:yes /L2TPRAW:yes /ETHERIP:no /PSK:${PSK} /DEFAULTHUB:DEFAULT
