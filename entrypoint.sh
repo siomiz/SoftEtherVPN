@@ -51,4 +51,7 @@ SPW=$(cat /dev/urandom | tr -dc 'A-Za-z0-9' | fold -w 20 | head -n 1)
 
 /opt/vpnserver stop 2>&1 > /dev/null
 
+# while-loop to wait until server goes away
+while pgrep vpnserver > /dev/null; do sleep 1; done
+
 exec "$@"
