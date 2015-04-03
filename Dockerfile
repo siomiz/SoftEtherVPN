@@ -3,8 +3,7 @@ FROM centos:centos7
 MAINTAINER Tomohisa Kusano <siomiz@gmail.com>
 
 COPY build.sh /build.sh
-RUN chmod +x /build.sh \
-    && /build.sh \
+RUN bash /build.sh \
     && rm /build.sh
 
 COPY entrypoint.sh /entrypoint.sh
