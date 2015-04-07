@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+if [ ! -f /opt/vpn_server.config ]; then
+
 : ${PSK:='notasecret'}
 : ${USERNAME:=user$(cat /dev/urandom | tr -dc '0-9' | fold -w 4 | head -n 1)}
 
@@ -60,4 +62,7 @@ set -e
 
 echo [initial setup OK]
 
+fi
+
 exec "$@"
+
