@@ -4,7 +4,8 @@
 
 static volatile FILE *fp;
 
-void noop(){
+void quit(){
+  pclose((FILE *)fp);
 }
 
 int main(){
@@ -15,12 +16,13 @@ int main(){
 
   if(!(fp = (FILE *)popen(cmd, "re"))){
 
-    printf("popen failed");
+    printf("popen failed\n");
     exit(-1);
 
   }else{
 
-    signal(SIGINT, noop);
+    signal(SIGINT, quit);
+    signal(SIGTERM, quit);
 
     sigfillset(&mask);
     sigwait(&mask, &sig);
