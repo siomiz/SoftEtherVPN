@@ -17,6 +17,10 @@ cp bin/vpncmd/vpncmd /opt/vpncmd
 
 rm -rf /usr/local/src/vpnserver
 
+gcc -o /usr/local/sbin/run /usr/local/src/run.c
+
+rm /usr/local/src/run.c
+
 yum -y remove readline-devel ncurses-devel openssl-devel \
   && yum -y groupremove "Development Tools" \
   && yum clean all
