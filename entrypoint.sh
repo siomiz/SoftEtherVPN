@@ -39,6 +39,11 @@ done
 # enable SecureNAT
 /opt/vpncmd localhost /SERVER /CSV /HUB:DEFAULT /CMD SecureNatEnable
 
+# enable OpenVPN
+/opt/vpncmd localhost /SERVER /CSV /CMD OpenVpnEnable yes /PORTS:1194
+/opt/vpncmd localhost /SERVER /CSV /CMD ServerCertGet cert
+cat cert
+
 # add user
 /opt/vpncmd localhost /SERVER /HUB:DEFAULT /CSV /CMD UserCreate ${USERNAME} /GROUP:none /REALNAME:none /NOTE:none
 /opt/vpncmd localhost /SERVER /HUB:DEFAULT /CSV /CMD UserPasswordSet ${USERNAME} /PASSWORD:${PASSWORD}
