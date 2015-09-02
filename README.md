@@ -43,4 +43,4 @@ The entire log can be saved and used as an `.ovpn` config file (change as needed
 
   [1]: https://www.softether.org/
   [2]: https://github.com/SoftEtherVPN/SoftEtherVPN
-  [3]: http://opensource.org/licenses/MIT
+  [3]: https://opensource.org/licenses/MIT
