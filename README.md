@@ -1,7 +1,7 @@
 # A simple single-user [SoftEther VPN][1] server Docker image #
 
 ## Setup ##
- - L2TP/IPSec PSK
+ - L2TP/IPSec PSK + OpenVPN (Beta)
  - SecureNAT enabled
  - Perfect Forward Secrecy (DHE-RSA-AES256-SHA)
  - make'd from [the official SoftEther VPN GitHub repo][2] master (Note: they don't have any other branches or tags.)
@@ -29,6 +29,18 @@ Dots (.) are part of the password. Password will not be logged if specified via 
 
 Hub & server are locked down; they are given stronger random passwords which are not logged or displayed.
 
+## OpenVPN (Beta) ##
+
+Docker image tag `openvpn` is available for testing, which has OpenVPN compatibilities enabled in addition to IPSec. It will eventually be merged to `latest`.
+
+`docker run -d -p 1194:1194/udp siomiz/softethervpn:openvpn`
+
+The entire log can be saved and used as an `.ovpn` config file (change as needed).
+
+## License ##
+
+[MIT License][3].
 
   [1]: https://www.softether.org/
   [2]: https://github.com/SoftEtherVPN/SoftEtherVPN
+  [3]: http://opensource.org/licenses/MIT
