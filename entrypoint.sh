@@ -6,18 +6,20 @@ if [ ! -f /opt/vpn_server.config ]; then
 : ${PSK:='notasecret'}
 : ${USERNAME:=user$(cat /dev/urandom | tr -dc '0-9' | fold -w 4 | head -n 1)}
 
+printf '# '
 printf '=%.0s' {1..24}
 echo
-echo ${USERNAME}
+echo \# ${USERNAME}
 
 if [[ $PASSWORD ]]
 then
-  echo '<use the password specified at -e PASSWORD>'
+  echo '# <use the password specified at -e PASSWORD>'
 else
   PASSWORD=$(cat /dev/urandom | tr -dc '0-9' | fold -w 20 | head -n 1 | sed 's/.\{4\}/&./g;s/.$//;')
-  echo ${PASSWORD}
+  echo \# ${PASSWORD}
 fi  
 
+printf '# '
 printf '=%.0s' {1..24}
 echo
 
@@ -41,8 +43,14 @@ done
 
 # enable OpenVPN
 /opt/vpncmd localhost /SERVER /CSV /CMD OpenVpnEnable yes /PORTS:1194
-/opt/vpncmd localhost /SERVER /CSV /CMD ServerCertGet cert
-cat cert
+/opt/vpncmd localhost /SERVER /CSV /CMD OpenVpnMakeConfig openvpn.zip 2>&1 > /dev/null
+
+# extract .ovpn config
+unzip -p openvpn.zip *_l3.ovpn > softether.ovpn
+# delete "#" comments, \r, and empty lines
+sed -i '/^#/d;s/\r//;/^$/d' softether.ovpn
+# send to stdout
+cat softether.ovpn
 
 # add user
 /opt/vpncmd localhost /SERVER /HUB:DEFAULT /CSV /CMD UserCreate ${USERNAME} /GROUP:none /REALNAME:none /NOTE:none
@@ -65,7 +73,7 @@ set +e
 while pgrep vpnserver > /dev/null; do sleep 1; done
 set -e
 
-echo [initial setup OK]
+echo \# [initial setup OK]
 
 fi
 
