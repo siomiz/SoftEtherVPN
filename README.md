@@ -37,6 +37,16 @@ Docker image tag `openvpn` is available for testing, which has OpenVPN compatibi
 
 The entire log can be saved and used as an `.ovpn` config file (change as needed).
 
+**Current limitation**: Server CA certificate will be created automatically at runtime but there is no way to retrieve its private key. For now you can create _a self-signed 1024-bit RSA certificate/key pair_ locally and feed both entire contents via `-e CERT` and `-e KEY`. X.509 markers (like `-----BEGIN CERTIFICATE-----`) and any non-BASE64 character (incl. newline) can be omitted and will be ignored.
+
+Examples (assuming bash; note the double-quotes `"` and backticks `` ` ``):
+
+* ``-e CERT="`cat server.crt`" -e KEY="`cat server.key`"``
+* `-e CERT="MIIDp..b9xA=" -e KEY="MIIEv..x/A=="`
+* `--env-file <cert-and-key.list>`
+
+Certificate volumes support (like `-v` or `--volumes-from`) will be added at some point...
+
 ## License ##
 
 [MIT License][3].
