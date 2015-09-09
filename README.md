@@ -29,6 +29,28 @@ Dots (.) are part of the password. Password will not be logged if specified via 
 
 Hub & server are locked down; they are given stronger random passwords which are not logged or displayed.
 
+## OpenVPN (Beta) ##
+
+Docker image tag `openvpn` is available for testing, which has OpenVPN compatibilities enabled in addition to IPSec. It will eventually be merged to `latest`.
+
+`docker run -d -p 1194:1194/udp siomiz/softethervpn:openvpn`
+
+The entire log can be saved and used as an `.ovpn` config file (change as needed).
+
+**Current limitation**: Server CA certificate will be created automatically at runtime but there is no way to retrieve its private key. For now you can create _a self-signed 1024-bit RSA certificate/key pair_ locally and feed both entire contents via `-e CERT` and `-e KEY`. X.509 markers (like `-----BEGIN CERTIFICATE-----`) and any non-BASE64 character (incl. newline) can be omitted and will be ignored.
+
+Examples (assuming bash; note the double-quotes `"` and backticks `` ` ``):
+
+* ``-e CERT="`cat server.crt`" -e KEY="`cat server.key`"``
+* `-e CERT="MIIDp..b9xA=" -e KEY="MIIEv..x/A=="`
+* `--env-file <cert-and-key.list>`
+
+Certificate volumes support (like `-v` or `--volumes-from`) will be added at some point...
+
+## License ##
+
+[MIT License][3].
 
   [1]: https://www.softether.org/
   [2]: https://github.com/SoftEtherVPN/SoftEtherVPN
+  [3]: https://github.com/siomiz/SoftEtherVPN/blob/openvpn/LICENSE
