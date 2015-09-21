@@ -2,13 +2,11 @@ FROM centos:centos7
 
 MAINTAINER Tomohisa Kusano <siomiz@gmail.com>
 
-COPY build.sh /build.sh
-COPY run.c /usr/local/src/
+COPY copyables /
+RUN chmod +x /entrypoint.sh /gencert.sh
+
 RUN bash /build.sh \
     && rm /build.sh
-
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
 
 WORKDIR /opt
 

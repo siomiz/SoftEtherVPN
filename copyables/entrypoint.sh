@@ -1,6 +1,13 @@
 #!/bin/bash
 set -e
 
+if [ "$@" == "gencert" ]; then
+
+  /gencert.sh
+  exit 0
+
+fi
+
 if [ ! -f /opt/vpn_server.config ]; then
 
 : ${PSK:='notasecret'}
