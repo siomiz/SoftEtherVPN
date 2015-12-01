@@ -6,7 +6,7 @@
  - Perfect Forward Secrecy (DHE-RSA-AES256-SHA)
  - make'd from [the official SoftEther VPN GitHub repo][2] master (Note: they don't have any other branches or tags.)
 
-`docker run -d -p 500:500/udp -p 4500:4500/udp -p 1701:1701/tcp siomiz/softethervpn`
+`docker run -d --cap-add NET_ADMIN -p 500:500/udp -p 4500:4500/udp -p 1701:1701/tcp siomiz/softethervpn`
 
 Connectivity tested on Android + iOS devices. It seems Android devices do not require L2TP server to have port 1701/tcp open.
 
@@ -33,7 +33,7 @@ Hub & server are locked down; they are given stronger random passwords which are
 
 Docker image tag `openvpn` is available for testing, which has OpenVPN compatibilities enabled in addition to IPSec. It will eventually be merged to `latest`.
 
-`docker run -d -p 1194:1194/udp siomiz/softethervpn:openvpn`
+`docker run -d --cap-add NET_ADMIN -p 1194:1194/udp siomiz/softethervpn:openvpn`
 
 The entire log can be saved and used as an `.ovpn` config file (change as needed).
 
