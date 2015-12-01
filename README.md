@@ -1,6 +1,6 @@
-# A simple single-user [SoftEther VPN][1] server Docker image #
+# A simple single-user [SoftEther VPN][1] server Docker image
 
-## Setup ##
+## Setup
  - L2TP/IPSec PSK + OpenVPN (Beta)
  - SecureNAT enabled
  - Perfect Forward Secrecy (DHE-RSA-AES256-SHA)
@@ -10,7 +10,7 @@
 
 Connectivity tested on Android + iOS devices. It seems Android devices do not require L2TP server to have port 1701/tcp open.
 
-## Credentials ##
+## Credentials
 
 All optional:
 
@@ -29,7 +29,7 @@ Dots (.) are part of the password. Password will not be logged if specified via 
 
 Hub & server are locked down; they are given stronger random passwords which are not logged or displayed.
 
-## OpenVPN (Beta) ##
+## OpenVPN (Beta)
 
 Docker image tag `openvpn` is available for testing, which has OpenVPN compatibilities enabled in addition to IPSec. It will eventually be merged to `latest`.
 
@@ -53,7 +53,7 @@ where `CERT` and `KEY` already filled in. Modify `PSK`/`USERNAME`/`PASSWORD`.
 
 Certificate volumes support (like `-v` or `--volumes-from`) will be added at some point...
 
-## License ##
+## License
 
 [MIT License][4].
 
