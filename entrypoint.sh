@@ -39,6 +39,10 @@ done
 # enable SecureNAT
 /opt/vpncmd localhost /SERVER /CSV /HUB:DEFAULT /CMD SecureNatEnable
 
+# disable extra logs
+/opt/vpncmd localhost /SERVER /CSV /HUB:DEFAULT /CMD LogDisable packet
+/opt/vpncmd localhost /SERVER /CSV /HUB:DEFAULT /CMD LogDisable security
+
 # add user
 /opt/vpncmd localhost /SERVER /HUB:DEFAULT /CSV /CMD UserCreate ${USERNAME} /GROUP:none /REALNAME:none /NOTE:none
 /opt/vpncmd localhost /SERVER /HUB:DEFAULT /CSV /CMD UserPasswordSet ${USERNAME} /PASSWORD:${PASSWORD}
