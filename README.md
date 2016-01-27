@@ -1,5 +1,7 @@
 # A simple single-user [SoftEther VPN][1] server Docker image
 
+**Note:** OpenVPN support is enabled on :latest image.
+
 ## Setup
  - L2TP/IPSec PSK + OpenVPN
  - SecureNAT enabled
@@ -21,17 +23,15 @@ All optional:
 It only creates a single user account with the above credentials in DEFAULT hub.
 See the docker log for username and password (unless `-e PASSWORD` is set), which *would look like*:
 
-    ========================
-    user6301
-    2329.2890.3101.2451.9875
-    ========================
+    # ========================
+    # user6301
+    # 2329.2890.3101.2451.9875
+    # ========================
 Dots (.) are part of the password. Password will not be logged if specified via `-e PASSWORD`; use `docker inspect` in case you need to see it.
 
 Hub & server are locked down; they are given stronger random passwords which are not logged or displayed.
 
 ## OpenVPN ##
-
-Docker image tag `openvpn` is available for testing, which has OpenVPN compatibilities enabled in addition to IPSec. It will eventually be merged to `latest`.
 
 `docker run -d --cap-add NET_ADMIN -p 1194:1194/udp siomiz/softethervpn`
 
