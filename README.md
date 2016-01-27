@@ -1,6 +1,6 @@
 # A simple single-user [SoftEther VPN][1] server Docker image
 
-**Note:** OpenVPN support is enabled on :latest image.
+**Note:** OpenVPN support is enabled on :latest image. STDOUT (`docker log`) format has changed as a result.
 
 ## Setup
  - L2TP/IPSec PSK + OpenVPN
@@ -8,9 +8,15 @@
  - Perfect Forward Secrecy (DHE-RSA-AES256-SHA)
  - make'd from [the official SoftEther VPN GitHub repo][2] master (Note: they don't have any other branches or tags.)
 
-`docker run -d --cap-add NET_ADMIN -p 500:500/udp -p 4500:4500/udp -p 1701:1701/tcp siomiz/softethervpn`
+`docker run -d --cap-add NET_ADMIN -p 500:500/udp -p 4500:4500/udp -p 1701:1701/tcp -p 1194:1194/udp siomiz/softethervpn`
 
 Connectivity tested on Android + iOS devices. It seems Android devices do not require L2TP server to have port 1701/tcp open.
+
+The above example will accept connections from both L2TP/IPSec and OpenVPN clients at the same time.
+
+Mix and match published ports: 
+- `-p 500:500/udp -p 4500:4500/udp -p 1701:1701/tcp` for L2TP/IPSec
+- `-p 1194:1194/udp` for OpenVPN.
 
 ## Credentials
 
