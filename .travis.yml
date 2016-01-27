@@ -1,0 +1,17 @@
+sudo: required
+
+language: c
+
+env:
+  - BUILD_DIR=.
+
+services:
+  - docker
+
+before_install:
+  - docker build -t siomiz/softethervpn $BUILD_DIR
+
+install: true
+
+script:
+  - docker run siomiz/softethervpn echo "[Travis CI OK]"
