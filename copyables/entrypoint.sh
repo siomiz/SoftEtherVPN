@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-if [ "$@" == "gencert" ]; then
+if [ "$*" == "gencert" ]; then
 
   /gencert.sh
   exit 0
