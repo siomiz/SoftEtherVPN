@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo "clean_requirements_on_remove=1" >> /etc/yum.conf
+
 yum -y update \
   && yum -y groupinstall "Development Tools" \
   && yum -y install readline-devel ncurses-devel openssl-devel iptables
@@ -24,5 +26,7 @@ rm /usr/local/src/run.c
 yum -y remove readline-devel ncurses-devel openssl-devel \
   && yum -y groupremove "Development Tools" \
   && yum clean all
+  
+rm -rf /var/log/* /var/cache/yum/* /var/lib/yum/*
 
 exit 0
