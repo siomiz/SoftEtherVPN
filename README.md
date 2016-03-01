@@ -1,5 +1,8 @@
 # A simple single-user [SoftEther VPN][1] server Docker image
 
+[![Travis](https://img.shields.io/travis/siomiz/SoftEtherVPN/master.svg?style=flat-square)]()
+[![ImageLayers Size](https://img.shields.io/imagelayers/image-size/siomiz/softethervpn/latest.svg?style=flat-square)]()
+
 **Note:** OpenVPN support is enabled on :latest image. STDOUT (`docker log`) format has changed as a result.
 
 ## Setup
