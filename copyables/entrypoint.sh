@@ -42,6 +42,9 @@ while : ; do
   sleep 1
 done
 
+# About command to grab version number
+/opt/vpncmd localhost /SERVER /CSV /CMD About | head -2 | tail -1 | sed 's/^/# /;'
+
 # enable L2TP_IPsec
 /opt/vpncmd localhost /SERVER /CSV /CMD IPsecEnable /L2TP:yes /L2TPRAW:yes /ETHERIP:no /PSK:${PSK} /DEFAULTHUB:DEFAULT
 
