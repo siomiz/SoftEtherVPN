@@ -1,7 +1,6 @@
 # A simple single-user [SoftEther VPN][1] server Docker image
 
 [![Travis](https://img.shields.io/travis/siomiz/SoftEtherVPN/master.svg?style=flat-square)]()
-<!--- [![ImageLayers Size](https://img.shields.io/imagelayers/image-size/siomiz/softethervpn/latest.svg?style=flat-square)]() -->
 
 **Note:** OpenVPN support is enabled on :latest image. STDOUT (`docker log`) format has changed as a result.
 
@@ -10,6 +9,7 @@
  - SecureNAT enabled
  - Perfect Forward Secrecy (DHE-RSA-AES256-SHA)
  - make'd from [the official SoftEther VPN GitHub repo][2] master (Note: they don't have any other branches or tags.)
+   - with [a patch to set AES-256-CBC as OpenVPN default cipher](https://github.com/siomiz/SoftEtherVPN/tree/master/copyables/usr/local/src/AES-256-CBC.patch).
 
 `docker run -d --cap-add NET_ADMIN -p 500:500/udp -p 4500:4500/udp -p 1701:1701/tcp -p 1194:1194/udp siomiz/softethervpn`
 
