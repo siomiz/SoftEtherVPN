@@ -58,7 +58,7 @@ Examples (assuming bash; note the double-quotes `"` and backticks `` ` ``):
 
 `docker run --rm siomiz/softethervpn gencert > /path/to/envlist`
 
-where `CERT` and `KEY` already filled in. Modify `PSK`/`USERNAME`/`PASSWORD`.
+The output will have `CERT` and `KEY` already filled in. Modify `PSK`/`USERNAME`/`PASSWORD`.
 
 Certificate volumes support (like `-v` or `--volumes-from`) will be added at some point...
 
