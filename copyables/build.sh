@@ -12,6 +12,7 @@ git clone --depth 1 https://github.com/SoftEtherVPN/SoftEtherVPN.git /usr/local/
 cd /usr/local/src/vpnserver
 
 cp src/makefiles/linux_64bit.mak Makefile
+patch -p1 < ../AES-256-CBC.patch
 make
 
 cp bin/vpnserver/vpnserver /opt/vpnserver
