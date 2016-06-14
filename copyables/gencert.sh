@@ -21,8 +21,7 @@ KEY=$(cat key | sed -r 's/\-{5}[^\-]+\-{5}//g;s/[^A-Za-z0-9\+\/\=]//g;' | tr -d 
 
 cat <<E
 PSK=
-USERNAME=
-PASSWORD=
+USERS=
 CERT=${CERT}
 KEY=${KEY}
 
