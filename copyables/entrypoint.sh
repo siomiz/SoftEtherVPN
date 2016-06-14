@@ -11,19 +11,21 @@ fi
 if [ ! -f /opt/vpn_server.config ]; then
 
 : ${PSK:='notasecret'}
-: ${USERNAME:=user$(cat /dev/urandom | tr -dc '0-9' | fold -w 4 | head -n 1)}
 
-printf '# '
-printf '=%.0s' {1..24}
-echo
-echo \# ${USERNAME}
-
-if [[ $PASSWORD ]]
+if [[ $USERS ]]
 then
-  echo '# <use the password specified at -e PASSWORD>'
+  echo '# <use the password specified at -e USERS>'
 else
+  : ${USERNAME:=user$(cat /dev/urandom | tr -dc '0-9' | fold -w 4 | head -n 1)}
+  printf '# '
+  printf '=%.0s' {1..24}
+  echo
+  echo \# ${USERNAME}
+  
   PASSWORD=$(cat /dev/urandom | tr -dc '0-9' | fold -w 20 | head -n 1 | sed 's/.\{4\}/&./g;s/.$//;')
   echo \# ${PASSWORD}
+
+  USERS="${USERNAME}:${PASSWORD}"
 fi  
 
 printf '# '
@@ -85,8 +87,15 @@ cat softether.ovpn
 /opt/vpncmd localhost /SERVER /CSV /HUB:DEFAULT /CMD LogDisable security
 
 # add user
-/opt/vpncmd localhost /SERVER /HUB:DEFAULT /CSV /CMD UserCreate ${USERNAME} /GROUP:none /REALNAME:none /NOTE:none
-/opt/vpncmd localhost /SERVER /HUB:DEFAULT /CSV /CMD UserPasswordSet ${USERNAME} /PASSWORD:${PASSWORD}
+
+while IFS=';' read -ra USER; do
+  for i in "${USER[@]}"; do
+    IFS=':' read username password <<< "$i"
+    echo "Creating user: ${username}"
+    /opt/vpncmd localhost /SERVER /HUB:DEFAULT /CSV /CMD UserCreate ${username} /GROUP:none /REALNAME:none /NOTE:none
+    /opt/vpncmd localhost /SERVER /HUB:DEFAULT /CSV /CMD UserPasswordSet ${username} /PASSWORD:${password}
+  done
+done <<< "$USERS"
 
 export PASSWORD='**'
 

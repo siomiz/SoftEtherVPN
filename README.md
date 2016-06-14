@@ -26,17 +26,15 @@ Mix and match published ports:
 All optional:
 
 - `-e PSK`: Pre-Shared Key (PSK), if not set: "notasecret" (without quotes) by default.
-- `-e USERNAME`: if not set a random username ("user[nnnn]") is created.
-- `-e PASSWORD`: if not set a random weak password is created.
+- `-e USERS`: Multiple usernames and passwords may be set with the following pattern: `username:password;user2:pass2;user3:pass3`. Username and passwords are separated by `:`. Each pair of `username:password` should be separated by `;`. If not set a random username ("user[nnnn]") and a random weak password is created.
 
-It only creates a single user account with the above credentials in DEFAULT hub.
-See the docker log for username and password (unless `-e PASSWORD` is set), which *would look like*:
+See the docker log for username and password (unless `-e USERS` is set), which *would look like*:
 
     # ========================
     # user6301
     # 2329.2890.3101.2451.9875
     # ========================
-Dots (.) are part of the password. Password will not be logged if specified via `-e PASSWORD`; use `docker inspect` in case you need to see it.
+Dots (.) are part of the password. Password will not be logged if specified via `-e USERS`; use `docker inspect` in case you need to see it.
 
 Hub & server are locked down; they are given stronger random passwords which are not logged or displayed.
 
@@ -58,7 +56,7 @@ Examples (assuming bash; note the double-quotes `"` and backticks `` ` ``):
 
 `docker run --rm siomiz/softethervpn gencert > /path/to/envlist`
 
-The output will have `CERT` and `KEY` already filled in. Modify `PSK`/`USERNAME`/`PASSWORD`.
+The output will have `CERT` and `KEY` already filled in. Modify `PSK`/`USERS`.
 
 Certificate volumes support (like `-v` or `--volumes-from`) will be added at some point...
 
