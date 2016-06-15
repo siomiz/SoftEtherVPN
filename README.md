@@ -1,4 +1,4 @@
-# A simple single-user [SoftEther VPN][1] server Docker image
+# A simple [SoftEther VPN][1] server Docker image
 
 [![Travis](https://img.shields.io/travis/siomiz/SoftEtherVPN/master.svg?style=flat-square)](https://travis-ci.org/siomiz/SoftEtherVPN)
 
@@ -26,7 +26,9 @@ Mix and match published ports:
 All optional:
 
 - `-e PSK`: Pre-Shared Key (PSK), if not set: "notasecret" (without quotes) by default.
-- `-e USERS`: Multiple usernames and passwords may be set with the following pattern: `username:password;user2:pass2;user3:pass3`. Username and passwords are separated by `:`. Each pair of `username:password` should be separated by `;`. If not set a random username ("user[nnnn]") and a random weak password is created.
+- `-e USERS`: Multiple usernames and passwords may be set with the following pattern: `username:password;user2:pass2;user3:pass3`. Username and passwords are separated by `:`. Each pair of `username:password` should be separated by `;`. If not set a single user account with a random username ("user[nnnn]") and a random weak password is created.
+
+Single-user mode (usage of `-e USERNAME` and `-e PASSWORD`) is still supported.
 
 See the docker log for username and password (unless `-e USERS` is set), which *would look like*:
 
