@@ -40,6 +40,10 @@ Dots (.) are part of the password. Password will not be logged if specified via 
 
 Hub & server are locked down; they are given stronger random passwords which are not logged or displayed.
 
+#### Notice ####
+
+If you specify credentials using environment variables (`-e`), they may be revealed via the process list on host (ex. `ps(1)` command) or `docker inspect` command. It is recommended to mount an already-configured SoftEther VPN config file at `/opt/vpn_server.config`, which contains hashed passwords rather than raw ones. The initial setup will be skipped if this file exists at runtime (in entrypoint script). You can obtain this file from a running container using [`docker cp` command](https://docs.docker.com/engine/reference/commandline/cp/).
+
 ## OpenVPN ##
 
 `docker run -d --cap-add NET_ADMIN -p 1194:1194/udp siomiz/softethervpn`
