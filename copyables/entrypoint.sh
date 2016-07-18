@@ -60,7 +60,11 @@ done
 # enable OpenVPN
 /opt/vpncmd localhost /SERVER /CSV /CMD OpenVpnEnable yes /PORTS:1194
 
-if [[ "*${CERT}*" != "**" && "*${KEY}*" != "**" ]]; then
+# set server certificate & key
+if [ -f server.crt && -f server.key ]; then
+  /opt/vpncmd localhost /SERVER /CSV /CMD ServerCertSet /LOADCERT:server.crt /LOADKEY:server.key
+
+elif [[ "*${CERT}*" != "**" && "*${KEY}*" != "**" ]]; then
   # server cert/key pair specified via -e
   CERT=$(echo ${CERT} | sed -r 's/\-{5}[^\-]+\-{5}//g;s/[^A-Za-z0-9\+\/\=]//g;')
   echo -----BEGIN CERTIFICATE----- > server.crt
