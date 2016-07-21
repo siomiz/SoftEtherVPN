@@ -22,6 +22,9 @@ Mix and match published ports:
 - `-p 1194:1194/udp` for OpenVPN.
 - `-p 443:443/tcp` for OpenVPN over HTTPS.
 - `-p 5555:5555/tcp` for SoftEther VPN (recommended by vendor).
+- `-p 992:992/tcp` is also available as alternative.
+
+Any protocol supported by SoftEther VPN server is accepted at any open/published port (if VPN client allows non-default ports).
 
 ## Credentials
 
