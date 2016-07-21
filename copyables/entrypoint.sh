@@ -61,7 +61,7 @@ done
 /opt/vpncmd localhost /SERVER /CSV /CMD OpenVpnEnable yes /PORTS:1194
 
 # set server certificate & key
-if [ -f server.crt && -f server.key ]; then
+if [[ -f server.crt && -f server.key ]]; then
   /opt/vpncmd localhost /SERVER /CSV /CMD ServerCertSet /LOADCERT:server.crt /LOADKEY:server.key
 
 elif [[ "*${CERT}*" != "**" && "*${KEY}*" != "**" ]]; then
