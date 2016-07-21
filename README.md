@@ -20,6 +20,7 @@ The above example will accept connections from both L2TP/IPSec and OpenVPN clien
 Mix and match published ports: 
 - `-p 500:500/udp -p 4500:4500/udp -p 1701:1701/tcp` for L2TP/IPSec
 - `-p 1194:1194/udp` for OpenVPN.
+- `-p 443:443/tcp` for OpenVPN over HTTPS.
 - `-p 5555:5555/tcp` for SoftEther VPN (recommended by vendor).
 
 ## Credentials
