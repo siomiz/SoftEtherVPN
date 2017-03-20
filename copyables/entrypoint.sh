@@ -22,7 +22,7 @@ then
 else
   : ${USERNAME:=user$(cat /dev/urandom | tr -dc '0-9' | fold -w 4 | head -n 1)}
   echo \# ${USERNAME}
-  
+
   if [[ $PASSWORD ]]
   then
     echo '# <use the password specified at -e PASSWORD>'
@@ -30,7 +30,7 @@ else
     PASSWORD=$(cat /dev/urandom | tr -dc '0-9' | fold -w 20 | head -n 1 | sed 's/.\{4\}/&./g;s/.$//;')
     echo \# ${PASSWORD}
   fi
-fi  
+fi
 
 printf '# '
 printf '=%.0s' {1..24}
@@ -141,5 +141,12 @@ echo \# [initial setup OK]
 
 fi
 
-exec "$@"
+if [[ -d "/opt/scripts/" ]]; then
+  while read _script; do
+    echo >&2 ":: executing $_script..."
+    bash -n "$_script" \
+    && bash "$_script"
+  done < <(find /opt/scripts/ -type f -iname "*.sh")
+fi
 
+exec "$@"
