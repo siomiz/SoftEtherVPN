@@ -12,7 +12,7 @@ git clone --depth 1 https://github.com/SoftEtherVPN/SoftEtherVPN_Stable.git /usr
 cd /usr/local/src/vpnserver
 
 cp src/makefiles/linux_64bit.mak Makefile
-patch -p1 < ../OpenVPN-cipher.patch
+
 make
 
 cp bin/vpnserver/vpnserver /opt/vpnserver
