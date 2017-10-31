@@ -8,7 +8,7 @@
  - L2TP/IPSec PSK + OpenVPN
  - SecureNAT enabled
  - Perfect Forward Secrecy (DHE-RSA-AES256-SHA)
- - make'd from [the official SoftEther VPN GitHub repo][2] master (Note: they don't have any other branches or tags.)
+ - make'd from [the official SoftEther VPN GitHub Stable Edition Repository][2] master.
    - with [a local patch to set AES-256-CBC + RMD160 as OpenVPN default ciphers](https://github.com/siomiz/SoftEtherVPN/tree/master/copyables/usr/local/src/OpenVPN-cipher.patch).
 
 `docker run -d --cap-add NET_ADMIN -p 500:500/udp -p 4500:4500/udp -p 1701:1701/tcp -p 1194:1194/udp -p 5555:5555/tcp siomiz/softethervpn`
@@ -78,6 +78,6 @@ Certificate volumes support (like `-v` or `--volumes-from`) will be added at som
 [MIT License][4].
 
   [1]: https://www.softether.org/
-  [2]: https://github.com/SoftEtherVPN/SoftEtherVPN
+  [2]: https://github.com/SoftEtherVPN/SoftEtherVPN_Stable
   [3]: https://docs.docker.com/engine/reference/commandline/run/#set-environment-variables-e-env-env-file
   [4]: https://github.com/siomiz/SoftEtherVPN/raw/master/LICENSE
