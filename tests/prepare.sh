@@ -6,7 +6,7 @@ set -ex
 sudo apt-get -qq update
 sudo apt-get install -y strongswan xl2tpd
 
-cat > /etc/ipsec.conf <<EOF
+sudo cat > /etc/ipsec.conf <<EOF
 config setup
 
 conn %default
@@ -30,11 +30,11 @@ conn meraki-vpn
     right=softethervpn
 EOF
 
-cat > /etc/ipsec.secret <<EOF
+sudo cat > /etc/ipsec.secret <<EOF
 : PSK "notasecret"
 EOF
 
-cat > /etc/xl2tpd/xl2tpd.conf <<EOF
+sudo cat > /etc/xl2tpd/xl2tpd.conf <<EOF
 [lac meraki]
 lns = softethervpn
 ppp debug = yes
@@ -42,7 +42,7 @@ pppoptfile = /etc/ppp/options.l2tpd.client
 length bit = yes
 EOF
 
-cat > /etc/ppp/options.l2tpd.client <<EOF
+sudo cat > /etc/ppp/options.l2tpd.client <<EOF
 ipcp-accept-local
 ipcp-accept-remote
 refuse-eap
@@ -59,9 +59,9 @@ lock
 connect-delay 5000
 EOF
 
-mkdir -p /var/run/xl2tpd
-touch /var/run/xl2tpd/l2tp-control
+sudo mkdir -p /var/run/xl2tpd
+sudo touch /var/run/xl2tpd/l2tp-control
 
-service strongswan restart
-service xl2tpd restart
+sudo service strongswan restart
+sudo service xl2tpd restart
 
