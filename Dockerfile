@@ -2,6 +2,8 @@ FROM centos:centos7
 
 MAINTAINER Tomohisa Kusano <siomiz@gmail.com>
 
+ENV BUILD_VERSION v4.22-9634-beta
+
 COPY copyables /
 RUN chmod +x /entrypoint.sh /gencert.sh
 
