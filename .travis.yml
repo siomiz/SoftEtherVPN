@@ -16,5 +16,5 @@ before_install:
 install: true
 
 script:
-  - docker run --cap-add NET_ADMIN -e USERNAME=test -e PASSWORD=test siomiz/softethervpn
+  - docker run -d --cap-add NET_ADMIN -e USERNAME=test -e PASSWORD=test siomiz/softethervpn
   - sudo bash ./ipsec.sh
