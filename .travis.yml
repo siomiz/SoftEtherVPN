@@ -5,7 +5,7 @@ jobs:
   include:
     - stage: Docker Build
       script:
-      - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+      - docker login -u="siomiz" -p="$DOCKER_PASSWORD"
       - docker build -t softethervpn .
       - docker tag softethervpn siomiz/softethervpn:travis-ci
       - docker push siomiz/softethervpn:travis-ci
