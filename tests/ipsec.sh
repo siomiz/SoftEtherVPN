@@ -3,11 +3,11 @@ set -ex
 
 ipsec --help
 
-ipsec up meraki
+ipsec up softethervpn
 
-echo "c meraki test test" > /var/run/xl2tpd/l2tp-control
+echo "c softethervpn test test" > /var/run/xl2tpd/l2tp-control
 
-echo "d meraki" > /var/run/xl2tpd/l2tp-control
+echo "d softethervpn" > /var/run/xl2tpd/l2tp-control
 
-ipsec down meraki
+ipsec down softethervpn
 

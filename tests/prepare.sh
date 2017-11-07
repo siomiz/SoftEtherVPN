@@ -19,7 +19,7 @@ conn %default
     ike=aes128-sha1-modp1024,3des-sha1-modp1024!
     esp=aes128-sha1-modp1024,3des-sha1-modp1024!
 
-conn meraki-vpn
+conn softethervpn
     keyexchange=ikev1
     left=%defaultroute
     auto=add
@@ -35,7 +35,7 @@ cat > /etc/ipsec.secret <<EOF
 EOF
 
 cat > /etc/xl2tpd/xl2tpd.conf <<EOF
-[lac meraki]
+[lac softethervpn]
 lns = softethervpn
 ppp debug = yes
 pppoptfile = /etc/ppp/options.l2tpd.client
