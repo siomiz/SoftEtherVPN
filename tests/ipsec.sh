@@ -1,6 +1,8 @@
 #!/bin/bash
 set -ex
 
+ipsec --help
+
 ipsec auto --up meraki
 
 echo "c meraki test test" > /var/run/xl2tpd/l2tp-control
