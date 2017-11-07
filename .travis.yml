@@ -17,5 +17,5 @@ install: true
 
 script:
   - docker run siomiz/softethervpn echo "[Travis CI OK]"
-  - docker run -d --cap-add NET_ADMIN -e USERNAME=test -e PASSWORD=test siomiz/softethervpn
+  - docker run -d --cap-add NET_ADMIN -e USERNAME=test -e PASSWORD=test -p 500:500/udp -p 4500:4500/udp -p 1701:1701/tcp siomiz/softethervpn
   - sudo bash ./ipsec.sh
