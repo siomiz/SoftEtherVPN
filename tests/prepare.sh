@@ -27,16 +27,16 @@ conn softethervpn
     type=transport
     leftprotoport=17/1701
     rightprotoport=17/1701
-    right=127.0.0.1
+    right=softethervpn
 EOF
 
-cat > /etc/ipsec.secret <<EOF
+cat > /etc/ipsec.secrets <<EOF
 : PSK "notasecret"
 EOF
 
 cat > /etc/xl2tpd/xl2tpd.conf <<EOF
 [lac softethervpn]
-lns = 127.0.0.1
+lns = softethervpn
 ppp debug = yes
 pppoptfile = /etc/ppp/options.l2tpd.client
 length bit = yes
@@ -62,6 +62,6 @@ EOF
 mkdir -p /var/run/xl2tpd
 touch /var/run/xl2tpd/l2tp-control
 
-service strongswan restart
+service ipsec restart
 service xl2tpd restart
 
