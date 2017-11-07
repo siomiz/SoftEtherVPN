@@ -15,5 +15,6 @@ jobs:
     - script:
       - docker network create test-ipsec
       - docker run -d --cap-add NET_ADMIN -e USERNAME=test -e PASSWORD=test --network test-ipsec siomiz/softethervpn:travis-ci
-      - sudo bash ./ipsec.sh
+      - sudo bash tests/prepare-ipsec.sh
+      - sudo bash tests/test-ipsec.sh
 
