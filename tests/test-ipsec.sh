@@ -1,8 +1,6 @@
 #!/bin/bash
 set -ex
 
-ipsec --help
-
 ipsec up softethervpn
 
 echo "c softethervpn test test" > /var/run/xl2tpd/l2tp-control
