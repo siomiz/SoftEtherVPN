@@ -5,12 +5,15 @@ jobs:
   include:
     - stage: Docker Build
       script:
+      - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
       - docker build -t softethervpn .
+      - docker tag softethervpn siomiz/softethervpn:travis-ci
+      - docker push siomiz/softethervpn:travis-ci
     - stage: Test
       script:
-      - docker run --rm softethervpn echo "[Travis CI OK]"
+      - docker run --rm siomiz/softethervpn:travis-ci echo "[Travis CI OK]"
     - script:
       - docker network create test-ipsec
-      - docker run -d --cap-add NET_ADMIN -e USERNAME=test -e PASSWORD=test --network test-ipsec softethervpn
+      - docker run -d --cap-add NET_ADMIN -e USERNAME=test -e PASSWORD=test --network test-ipsec siomiz/softethervpn:travis-ci
       - sudo bash ./ipsec.sh
 
