@@ -1,22 +1,16 @@
+dist: trusty
 sudo: required
 
-language: c
+jobs:
+  include:
+    - stage: Docker Build
+      script:
+      - docker build -t softethervpn .
+    - stage: Test
+      script:
+      - docker run --rm softethervpn echo "[Travis CI OK]"
+    - script:
+      - docker network create test-ipsec
+      - docker run -d --cap-add NET_ADMIN -e USERNAME=test -e PASSWORD=test --network test-ipsec softethervpn
+      - sudo bash ./ipsec.sh
 
-env:
-  - BUILD_DIR=.
-
-services:
-  - docker
-
-before_install:
-  - docker build -t siomiz/softethervpn $BUILD_DIR
-  - cd ${BUILD_DIR}/tests
-  - sudo bash ./prepare.sh
-
-install: true
-
-script:
-  - docker run --rm siomiz/softethervpn echo "[Travis CI OK]"
-  - docker network create test-network
-  - docker run -d --cap-add NET_ADMIN -e USERNAME=test -e PASSWORD=test --network test-network siomiz/softethervpn
-  - sudo bash ./ipsec.sh
