@@ -8,7 +8,7 @@
  - L2TP/IPSec PSK + OpenVPN
  - SecureNAT enabled
  - Perfect Forward Secrecy (DHE-RSA-AES256-SHA)
- - make'd from [the official SoftEther VPN GitHub Stable Edition Repository][2] master.
+ - make'd from [the official SoftEther VPN GitHub Stable Edition Repository][2] **v4.22-9634-beta** (pinned until #33 is resolved).
 
 `docker run -d --cap-add NET_ADMIN -p 500:500/udp -p 4500:4500/udp -p 1701:1701/tcp -p 1194:1194/udp -p 5555:5555/tcp siomiz/softethervpn`
 
