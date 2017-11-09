@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: /app
     docker:
-      - image: docker:17.05.0-ce-git
+      - image: docker:stable
     steps:
       - checkout
       - setup_remote_docker
@@ -12,12 +12,16 @@ jobs:
           command: |
             docker build -t softethervpn .
   test-basic:
+    docker:
+      - image: docker:stable
     steps:
       - run:
           name: Test Basic
           command: |
             docker images
   test-ipsec:
+    docker:
+      - image: docker:stable
     steps:
       - run:
           name: Test IPsec
