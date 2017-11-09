@@ -1,13 +1,28 @@
-version: 2
-jobs:
-  build:
-    working_directory: /app
-    docker:
-      - image: docker:17.05.0-ce-git
-    steps:
-      - checkout
-      - setup_remote_docker
-      - run:
-          name: Docker Build
-          command: |
-            docker build -t siomiz/softethervpn .
+workflows:
+  version: 2
+  jobs:
+    - build:
+        working_directory: /app
+        docker:
+          - image: docker:17.05.0-ce-git
+        steps:
+          - checkout
+          - setup_remote_docker
+          - run:
+              name: Docker Build
+              command: |
+                docker build -t softethervpn .
+    - test-basic:
+        requires:
+          - build
+        run:
+          - name: Basic Test
+          - command: |
+              true
+    - test-ipsec:
+        requires:
+          - build
+        run:
+          - name: IPsec Test
+          - command: |
+              true
