@@ -1,28 +1,37 @@
+version: 2
+jobs:
+  build:
+    working_directory: /app
+    docker:
+      - image: docker:17.05.0-ce-git
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Docker Build
+          command: |
+            docker build -t softethervpn .
+  test-basic:
+    steps:
+      - run:
+          name: Test Basic
+          command: |
+            docker images
+  test-ipsec:
+    steps:
+      - run:
+          name: Test IPsec
+          command: |
+            docker images -a
+
 workflows:
   version: 2
-  jobs:
-    - build:
-        working_directory: /app
-        docker:
-          - image: docker:17.05.0-ce-git
-        steps:
-          - checkout
-          - setup_remote_docker
-          - run:
-              name: Docker Build
-              command: |
-                docker build -t softethervpn .
-    - test-basic:
-        requires:
-          - build
-        run:
-          - name: Basic Test
-          - command: |
-              true
-    - test-ipsec:
-        requires:
-          - build
-        run:
-          - name: IPsec Test
-          - command: |
-              true
+  build-test:
+    jobs:
+      - build
+      - test-basic:
+          requires:
+            - build
+      - test-ipsec:
+          requires:
+            - build
