@@ -15,6 +15,8 @@ jobs:
     docker:
       - image: docker:stable
     steps:
+      - checkout
+      - setup_remote_docker
       - run:
           name: Test Basic
           command: |
@@ -23,6 +25,8 @@ jobs:
     docker:
       - image: docker:stable
     steps:
+      - checkout
+      - setup_remote_docker
       - run:
           name: Test IPsec
           command: |
