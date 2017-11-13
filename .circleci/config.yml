@@ -10,26 +10,39 @@ jobs:
       - run:
           name: Docker Build
           command: |
-            docker build -t softethervpn .
+            docker build -t softethervpn .;
+            docker save -o /tmp/softethervpn.tar softethervpn
+      - save_cache:
+          key: softethervpn-{{ .BuildNum }}
+          paths:
+            - /tmp/softethervpn.tar
   test-basic:
     docker:
       - image: docker:stable
     steps:
       - checkout
       - setup_remote_docker
+      - restore_cache:
+          keys:
+            - softethervpn-{{ .BuildNum }}
       - run:
           name: Test Basic
           command: |
-            docker images
+            docker load -i /tmp/softethervpn.tar;
+            docker images -a
   test-ipsec:
     docker:
       - image: docker:stable
     steps:
       - checkout
       - setup_remote_docker
+      - restore_cache:
+          keys:
+            - softethervpn-{{ .BuildNum }}
       - run:
           name: Test IPsec
           command: |
+            docker load -i /tmp/softethervpn.tar;
             docker images -a
 
 workflows:
