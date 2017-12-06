@@ -1,9 +1,7 @@
 FROM centos:centos7
 
 LABEL maintainer="Tomohisa Kusano <siomiz@gmail.com>" \
-      contributor="Ian Neubert <github.com/ianneub>" \
-      contributor="Ky-Anh Huynh <github.com/icy>" \
-      contributor="Max Kuchin <mkuchin@gmail.com>"
+      contributors="Ian Neubert <github.com/ianneub>; Ky-Anh Huynh <github.com/icy>; Max Kuchin <mkuchin@gmail.com>"
 
 ENV BUILD_VERSION=v4.22-9634-beta \
     DUMB_INIT_VERSION=v1.2.1
