@@ -5,7 +5,9 @@ echo "clean_requirements_on_remove=1" >> /etc/yum.conf
 yum -y update \
   && yum -y install unzip \
   && yum -y groupinstall "Development Tools" \
-  && yum -y install readline-devel ncurses-devel openssl-devel iptables
+  && yum -y install readline-devel ncurses-devel openssl-devel iptables glibc-static
+
+# Build SoftEtherVPN
 
 git clone https://github.com/SoftEtherVPN/SoftEtherVPN_Stable.git /usr/local/src/vpnserver
 
@@ -21,13 +23,29 @@ cp bin/vpnserver/vpnserver /opt/vpnserver
 cp bin/vpnserver/hamcore.se2 /opt/hamcore.se2
 cp bin/vpncmd/vpncmd /opt/vpncmd
 
+cd /
+
 rm -rf /usr/local/src/vpnserver
 
-gcc -o /usr/local/sbin/run /usr/local/src/run.c
+# Build dumb-init
 
-rm /usr/local/src/run.c
+git clone https://github.com/Yelp/dumb-init.git /usr/local/src/dumb-init
 
-yum -y remove readline-devel ncurses-devel openssl-devel \
+cd /usr/local/src/dumb-init
+
+git checkout ${DUMB_INIT_VERSION}
+
+make
+
+cp dumb-init /usr/local/bin/dumb-init
+
+cd /
+
+rm -rf /usr/local/src/dumb-init
+
+# Clean-up
+
+yum -y remove readline-devel ncurses-devel openssl-devel glibc-static \
   && yum -y groupremove "Development Tools" \
   && yum clean all
   
