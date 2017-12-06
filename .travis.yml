@@ -13,8 +13,9 @@ jobs:
       script:
       - docker run --rm siomiz/softethervpn:travis-ci echo "[Travis CI OK]"
     - script:
-      - docker network create --subnet 172.18.0.0/16 test-ipsec
-      - docker run -d --cap-add NET_ADMIN -e USERNAME=test -e PASSWORD=test --network test-ipsec --ip 172.18.0.3 siomiz/softethervpn:travis-ci
+      - sudo bash tests/prepare-softethervpn.sh
       - sudo bash tests/prepare-ipsec.sh
       - sudo bash tests/test-ipsec.sh
+    - script:
+      - sudo bash tests/prepare-softethervpn.sh
 
