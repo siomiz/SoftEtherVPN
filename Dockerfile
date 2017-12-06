@@ -1,6 +1,9 @@
 FROM centos:centos7
 
-MAINTAINER Tomohisa Kusano <siomiz@gmail.com>
+LABEL maintainer="Tomohisa Kusano <siomiz@gmail.com>" \
+      contributor="Ian Neubert <github.com/ianneub>" \
+      contributor="Ky-Anh Huynh <github.com/icy>" \
+      contributor="Max Kuchin <mkuchin@gmail.com>"
 
 ENV BUILD_VERSION v4.22-9634-beta
 
