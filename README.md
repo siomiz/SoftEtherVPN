@@ -2,13 +2,13 @@
 
 [![Travis](https://img.shields.io/travis/siomiz/SoftEtherVPN/master.svg?style=flat-square)](https://travis-ci.org/siomiz/SoftEtherVPN)
 
-**Note:** OpenVPN support is enabled on :latest image. STDOUT (`docker log`) format has changed as a result.
+**Note:** Base image is switched to debian:9-slim; please file issues if this is a problem for you.
 
 ## Setup
  - L2TP/IPSec PSK + OpenVPN
  - SecureNAT enabled
  - Perfect Forward Secrecy (DHE-RSA-AES256-SHA)
- - make'd from [the official SoftEther VPN GitHub Stable Edition Repository][2] **v4.22-9634-beta** (pinned until #33 is resolved).
+ - make'd from [the official SoftEther VPN GitHub Stable Edition Repository][2] **v4.25-9656-rtm**.
 
 `docker run -d --cap-add NET_ADMIN -p 500:500/udp -p 4500:4500/udp -p 1701:1701/tcp -p 1194:1194/udp -p 5555:5555/tcp siomiz/softethervpn`
 
