@@ -8,7 +8,7 @@ if [ "$*" == "gencert" ]; then
 
 fi
 
-if [ ! -f /opt/vpn_server.config ]; then
+if [ ! -f /usr/vpnserver/vpn_server.config ]; then
 
 : ${PSK:='notasecret'}
 
@@ -36,33 +36,33 @@ printf '# '
 printf '=%.0s' {1..24}
 echo
 
-/opt/vpnserver start 2>&1 > /dev/null
+/usr/bin/vpnserver start 2>&1 > /dev/null
 
 # while-loop to wait until server comes up
 # switch cipher
 while : ; do
   set +e
-  /opt/vpncmd localhost /SERVER /CSV /CMD ServerCipherSet DHE-RSA-AES256-SHA 2>&1 > /dev/null
+  /usr/bin/vpncmd localhost /SERVER /CSV /CMD ServerCipherSet DHE-RSA-AES256-SHA 2>&1 > /dev/null
   [[ $? -eq 0 ]] && break
   set -e
   sleep 1
 done
 
 # About command to grab version number
-/opt/vpncmd localhost /SERVER /CSV /CMD About | head -2 | tail -1 | sed 's/^/# /;'
+/usr/bin/vpncmd localhost /SERVER /CSV /CMD About | head -2 | tail -1 | sed 's/^/# /;'
 
 # enable L2TP_IPsec
-/opt/vpncmd localhost /SERVER /CSV /CMD IPsecEnable /L2TP:yes /L2TPRAW:yes /ETHERIP:no /PSK:${PSK} /DEFAULTHUB:DEFAULT
+/usr/bin/vpncmd localhost /SERVER /CSV /CMD IPsecEnable /L2TP:yes /L2TPRAW:yes /ETHERIP:no /PSK:${PSK} /DEFAULTHUB:DEFAULT
 
 # enable SecureNAT
-/opt/vpncmd localhost /SERVER /CSV /HUB:DEFAULT /CMD SecureNatEnable
+/usr/bin/vpncmd localhost /SERVER /CSV /HUB:DEFAULT /CMD SecureNatEnable
 
 # enable OpenVPN
-/opt/vpncmd localhost /SERVER /CSV /CMD OpenVpnEnable yes /PORTS:1194
+/usr/bin/vpncmd localhost /SERVER /CSV /CMD OpenVpnEnable yes /PORTS:1194
 
 # set server certificate & key
 if [[ -f server.crt && -f server.key ]]; then
-  /opt/vpncmd localhost /SERVER /CSV /CMD ServerCertSet /LOADCERT:server.crt /LOADKEY:server.key
+  /usr/bin/vpncmd localhost /SERVER /CSV /CMD ServerCertSet /LOADCERT:server.crt /LOADKEY:server.key
 
 elif [[ "*${CERT}*" != "**" && "*${KEY}*" != "**" ]]; then
   # server cert/key pair specified via -e
@@ -76,12 +76,12 @@ elif [[ "*${CERT}*" != "**" && "*${KEY}*" != "**" ]]; then
   echo ${KEY} | fold -w 64 >> server.key
   echo -----END PRIVATE KEY----- >> server.key
 
-  /opt/vpncmd localhost /SERVER /CSV /CMD ServerCertSet /LOADCERT:server.crt /LOADKEY:server.key
+  /usr/bin/vpncmd localhost /SERVER /CSV /CMD ServerCertSet /LOADCERT:server.crt /LOADKEY:server.key
   rm server.crt server.key
   export KEY='**'
 fi
 
-/opt/vpncmd localhost /SERVER /CSV /CMD OpenVpnMakeConfig openvpn.zip 2>&1 > /dev/null
+/usr/bin/vpncmd localhost /SERVER /CSV /CMD OpenVpnMakeConfig openvpn.zip 2>&1 > /dev/null
 
 # extract .ovpn config
 unzip -p openvpn.zip *_l3.ovpn > softether.ovpn
@@ -91,15 +91,15 @@ sed -i '/^#/d;s/\r//;/^$/d' softether.ovpn
 cat softether.ovpn
 
 # disable extra logs
-/opt/vpncmd localhost /SERVER /CSV /HUB:DEFAULT /CMD LogDisable packet
-/opt/vpncmd localhost /SERVER /CSV /HUB:DEFAULT /CMD LogDisable security
+/usr/bin/vpncmd localhost /SERVER /CSV /HUB:DEFAULT /CMD LogDisable packet
+/usr/bin/vpncmd localhost /SERVER /CSV /HUB:DEFAULT /CMD LogDisable security
 
 # add user
 
 adduser () {
     printf " $1"
-    /opt/vpncmd localhost /SERVER /HUB:DEFAULT /CSV /CMD UserCreate $1 /GROUP:none /REALNAME:none /NOTE:none
-    /opt/vpncmd localhost /SERVER /HUB:DEFAULT /CSV /CMD UserPasswordSet $1 /PASSWORD:$2
+    /usr/bin/vpncmd localhost /SERVER /HUB:DEFAULT /CSV /CMD UserCreate $1 /GROUP:none /REALNAME:none /NOTE:none
+    /usr/bin/vpncmd localhost /SERVER /HUB:DEFAULT /CSV /CMD UserPasswordSet $1 /PASSWORD:$2
 }
 
 printf '# Creating user(s):'
@@ -124,17 +124,17 @@ export PASSWORD='**'
 
 # set password for hub
 : ${HPW:=$(cat /dev/urandom | tr -dc 'A-Za-z0-9' | fold -w 16 | head -n 1)}
-/opt/vpncmd localhost /SERVER /HUB:DEFAULT /CSV /CMD SetHubPassword ${HPW}
+/usr/bin/vpncmd localhost /SERVER /HUB:DEFAULT /CSV /CMD SetHubPassword ${HPW}
 
 # set password for server
 : ${SPW:=$(cat /dev/urandom | tr -dc 'A-Za-z0-9' | fold -w 20 | head -n 1)}
-/opt/vpncmd localhost /SERVER /CSV /CMD ServerPasswordSet ${SPW}
+/usr/bin/vpncmd localhost /SERVER /CSV /CMD ServerPasswordSet ${SPW}
 
-/opt/vpnserver stop 2>&1 > /dev/null
+/usr/bin/vpnserver stop 2>&1 > /dev/null
 
 # while-loop to wait until server goes away
 set +e
-while pgrep vpnserver > /dev/null; do sleep 1; done
+while [[ $(pidof vpnserver)  ]] > /dev/null; do sleep 1; done
 set -e
 
 echo \# [initial setup OK]
