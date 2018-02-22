@@ -1,7 +1,7 @@
 FROM debian:9-slim
 
 LABEL maintainer="Tomohisa Kusano <siomiz@gmail.com>" \
-      contributors="Ian Neubert <github.com/ianneub>; Ky-Anh Huynh <github.com/icy>; Max Kuchin <mkuchin@gmail.com>"
+      contributors="Ian Neubert <github.com/ianneub>; Ky-Anh Huynh <github.com/icy>; Max Kuchin <mkuchin@gmail.com>; maltalex <github.com/maltalex>"
 
 ENV BUILD_VERSION=4.25-9656-rtm \
     SHA256_SUM=c5a1791d69dc6d1c53fb574a3ce709707338520be797acbeac0a631c96c68330
@@ -38,7 +38,10 @@ RUN wget https://github.com/SoftEtherVPN/SoftEtherVPN_Stable/archive/v${BUILD_VE
     && apt-get -y autoremove && rm -rf /var/lib/apt/lists/*
 
 COPY copyables /
-RUN chmod +x /entrypoint.sh /gencert.sh
+RUN chmod +x /entrypoint.sh /gencert.sh \
+    && rm -rf /opt && ln -s /usr/vpnserver /opt \
+    && find /usr/bin/vpn* -type f ! -name vpnserver \
+       -exec bash -c 'ln -s {} /opt/$(basename {})' \;
 
 WORKDIR /usr/vpnserver/
 
