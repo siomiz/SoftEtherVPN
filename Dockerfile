@@ -38,12 +38,15 @@ RUN wget https://github.com/SoftEtherVPN/SoftEtherVPN_Stable/archive/v${BUILD_VE
     && apt-get -y autoremove && rm -rf /var/lib/apt/lists/*
 
 COPY copyables /
+
 RUN chmod +x /entrypoint.sh /gencert.sh \
     && rm -rf /opt && ln -s /usr/vpnserver /opt \
     && find /usr/bin/vpn* -type f ! -name vpnserver \
        -exec bash -c 'ln -s {} /opt/$(basename {})' \;
 
 WORKDIR /usr/vpnserver/
+
+VOLUME ["/usr/vpnserver/server_log/"]
 
 ENTRYPOINT ["/entrypoint.sh"]
 
