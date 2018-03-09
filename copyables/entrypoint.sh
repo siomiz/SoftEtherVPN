@@ -32,6 +32,9 @@ else
   fi
 fi
 
+: ${MTU:='1500'}
+echo "# SecureNat MTU set to $MTU"
+
 printf '# '
 printf '=%.0s' {1..24}
 echo
@@ -56,7 +59,7 @@ done
 
 # enable SecureNAT
 /usr/bin/vpncmd localhost /SERVER /CSV /HUB:DEFAULT /CMD SecureNatEnable
-
+/usr/bin/vpncmd localhost /SERVER /CSV /HUB:DEFAULT /CMD NatSet /MTU:$MTU /LOG:no /TCPTIMEOUT:3600 /UDPTIMEOUT:1800
 # enable OpenVPN
 /usr/bin/vpncmd localhost /SERVER /CSV /CMD OpenVpnEnable yes /PORTS:1194
 
