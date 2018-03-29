@@ -7,7 +7,7 @@
 ## Image Tags
 Base OS Image | Latest Stable ([v4.25-9656-rtm](https://github.com/SoftEtherVPN/SoftEtherVPN_Stable/tree/v4.25-9656-rtm))
 ------------- | --
-`centos:7` | **`:latest`**, `:9656`, `:9656-centos`
+`centos:7` | **`:latest`**, `:9656`, `:centos`, `:9656-centos`
 `debian:9-slim` | `:debian`, `:9656-debian`
 
 ## Setup
