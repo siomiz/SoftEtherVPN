@@ -1,14 +1,20 @@
-# A simple [SoftEther VPN][1] server Docker image
+# A simple<sup>*</sup> [SoftEther VPN][1] server Docker image
 
-[![Travis](https://img.shields.io/travis/siomiz/SoftEtherVPN/master.svg?style=flat-square)](https://travis-ci.org/siomiz/SoftEtherVPN)
+`:latest` = [![Travis](https://img.shields.io/travis/siomiz/SoftEtherVPN/master.svg?style=flat-square)](https://travis-ci.org/siomiz/SoftEtherVPN)
 
-**Note:** Base image is switched to debian:9-slim; please file issues if this is a problem for you.
+<sup>*</sup> "Simple" as in no configuration parameter is needed for a single-user SecureNAT setup.
+
+## Image Tags
+Base OS Image | Latest Stable ([v4.25-9656-rtm](https://github.com/SoftEtherVPN/SoftEtherVPN_Stable/tree/v4.25-9656-rtm))
+------------- | --
+`centos:7` | **`:latest`**, `:9656`, `:9656-centos`
+`debian:9-slim` | `:debian`, `:9656-debian`
 
 ## Setup
  - L2TP/IPSec PSK + OpenVPN
  - SecureNAT enabled
  - Perfect Forward Secrecy (DHE-RSA-AES256-SHA)
- - make'd from [the official SoftEther VPN GitHub Stable Edition Repository][2] **v4.25-9656-rtm**.
+ - make'd from [the official SoftEther VPN GitHub Stable Edition Repository][2].
 
 `docker run -d --cap-add NET_ADMIN -p 500:500/udp -p 4500:4500/udp -p 1701:1701/tcp -p 1194:1194/udp -p 5555:5555/tcp siomiz/softethervpn`
 
