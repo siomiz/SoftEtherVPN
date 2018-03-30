@@ -12,19 +12,35 @@ RUN wget https://github.com/SoftEtherVPN/SoftEtherVPN_Stable/archive/v${BUILD_VE
     && tar -x -C /usr/local/src/ -f v${BUILD_VERSION}.tar.gz \
     && rm v${BUILD_VERSION}.tar.gz
 
-FROM centos:7
+FROM centos:7 as build
 
 COPY --from=prep /usr/local/src /usr/local/src
 
+RUN yum -y update \
+    && yum -y groupinstall "Development Tools" \
+    && yum -y install readline-devel ncurses-devel openssl-devel \
+    && cd /usr/local/src/SoftEtherVPN_Stable-* \
+    && ./configure \
+    && make \
+    && make install \
+    && zip -r9 /artifacts.zip /usr/vpn* /usr/bin/vpn*
+
+FROM centos:7
+
+COPY --from=build /artifacts.zip /
+
 COPY copyables /
 
-RUN /bin/bash /build-centos.sh \
-    && /bin/rm /build-*.sh
-
-RUN chmod +x /entrypoint.sh /gencert.sh \
-    && rm -rf /opt && ln -s /usr/vpnserver /opt \
+RUN yum -y update \
+    && yum -y install unzip iptables sysvinit-tools \
+    && rm -rf /var/log/* /var/cache/yum/* /var/lib/yum/* \
+    && chmod +x /entrypoint.sh /gencert.sh \
+    && unzip -o /artifacts.zip -d / \
+    && rm /artifacts.zip \
+    && rm -rf /opt \
+    && ln -s /usr/vpnserver /opt \
     && find /usr/bin/vpn* -type f ! -name vpnserver \
-       -exec bash -c 'ln -s {} /opt/$(basename {})' \;
+       -exec sh -c 'ln -s {} /opt/$(basename {})' \;
 
 WORKDIR /usr/vpnserver/
 
