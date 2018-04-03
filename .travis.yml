@@ -5,16 +5,27 @@ jobs:
   include:
     - stage: Docker Build
       script:
-      - docker login -u="siomiz" -p="$DOCKER_PASSWORD"
+      - echo "$DOCKER_PASSWORD" | docker login -u="siomiz" --password-stdin
       - docker build -t softethervpn .
       - docker tag softethervpn siomiz/softethervpn:travis-ci
       - docker push siomiz/softethervpn:travis-ci
+    - script:
+      - echo "$DOCKER_PASSWORD" | docker login -u="siomiz" --password-stdin
+      - docker build -t softethervpn-alpine -f Dockerfile.alpine .
+      - docker tag softethervpn-alpine siomiz/softethervpn:alpine-travis-ci
+      - docker push siomiz/softethervpn:alpine-travis-ci
     - stage: Test
       script:
       - docker run --rm siomiz/softethervpn:travis-ci echo "[Travis CI OK]"
+    - script:
+      - docker run --rm siomiz/softethervpn:alpine-travis-ci echo "[Travis CI OK]"
     - script:
       - docker network create --subnet 172.18.0.0/16 test-ipsec
       - docker run -d --cap-add NET_ADMIN -e USERNAME=test -e PASSWORD=test --network test-ipsec --ip 172.18.0.3 siomiz/softethervpn:travis-ci
       - sudo bash tests/prepare-ipsec.sh
       - sudo bash tests/test-ipsec.sh
-
+    - script:
+      - docker network create --subnet 172.18.0.0/16 test-ipsec
+      - docker run -d --cap-add NET_ADMIN -e USERNAME=test -e PASSWORD=test --network test-ipsec --ip 172.18.0.3 siomiz/softethervpn:alpine-travis-ci
+      - sudo bash tests/prepare-ipsec.sh
+      - sudo bash tests/test-ipsec.sh
