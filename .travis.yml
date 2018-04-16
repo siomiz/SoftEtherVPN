@@ -5,27 +5,36 @@ jobs:
   include:
     - stage: Docker Build
       script:
-      - echo "$DOCKER_PASSWORD" | docker login -u="siomiz" --password-stdin
-      - docker build -t softethervpn .
-      - docker tag softethervpn siomiz/softethervpn:travis-ci
-      - docker push siomiz/softethervpn:travis-ci
+      - docker build .
     - script:
-      - echo "$DOCKER_PASSWORD" | docker login -u="siomiz" --password-stdin
-      - docker build -t softethervpn-alpine -f Dockerfile.alpine .
-      - docker tag softethervpn-alpine siomiz/softethervpn:alpine-travis-ci
-      - docker push siomiz/softethervpn:alpine-travis-ci
+      - docker build -f Dockerfile.alpine .
+    - script:
+      - docker build -f Dockerfile.debian .
     - stage: Test
       script:
-      - docker run --rm siomiz/softethervpn:travis-ci echo "[Travis CI OK]"
+      - docker build -t softethervpn .
+      - docker run softethervpn echo "[Travis CI OK]"
     - script:
-      - docker run --rm siomiz/softethervpn:alpine-travis-ci echo "[Travis CI OK]"
+      - docker build -t softethervpn-alpine -f Dockerfile.alpine .
+      - docker run softethervpn-alpine echo "[Travis CI OK]"
     - script:
+      - docker build -t softethervpn-debian -f Dockerfile.debian .
+      - docker run softethervpn-debian echo "[Travis CI OK]"
+    - script:
+      - docker build -t softethervpn .
       - docker network create --subnet 172.18.0.0/16 test-ipsec
-      - docker run -d --cap-add NET_ADMIN -e USERNAME=test -e PASSWORD=test --network test-ipsec --ip 172.18.0.3 siomiz/softethervpn:travis-ci
+      - docker run -d --cap-add NET_ADMIN -e USERNAME=test -e PASSWORD=test --network test-ipsec --ip 172.18.0.3 softethervpn
       - sudo bash tests/prepare-ipsec.sh
       - sudo bash tests/test-ipsec.sh
     - script:
+      - docker build -t softethervpn-alpine -f Dockerfile.alpine .
       - docker network create --subnet 172.18.0.0/16 test-ipsec
-      - docker run -d --cap-add NET_ADMIN -e USERNAME=test -e PASSWORD=test --network test-ipsec --ip 172.18.0.3 siomiz/softethervpn:alpine-travis-ci
+      - docker run -d --cap-add NET_ADMIN -e USERNAME=test -e PASSWORD=test --network test-ipsec --ip 172.18.0.3 softethervpn-alpine
+      - sudo bash tests/prepare-ipsec.sh
+      - sudo bash tests/test-ipsec.sh
+    - script:
+      - docker build -t softethervpn-debian -f Dockerfile.debian .
+      - docker network create --subnet 172.18.0.0/16 test-ipsec
+      - docker run -d --cap-add NET_ADMIN -e USERNAME=test -e PASSWORD=test --network test-ipsec --ip 172.18.0.3 softethervpn-debian
       - sudo bash tests/prepare-ipsec.sh
       - sudo bash tests/test-ipsec.sh
