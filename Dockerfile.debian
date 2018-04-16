@@ -12,17 +12,52 @@ RUN wget https://github.com/SoftEtherVPN/SoftEtherVPN_Stable/archive/v${BUILD_VE
     && tar -x -C /usr/local/src/ -f v${BUILD_VERSION}.tar.gz \
     && rm v${BUILD_VERSION}.tar.gz
 
-FROM debian:9-slim
+FROM debian:9 as build
 
 COPY --from=prep /usr/local/src /usr/local/src
 
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+    build-essential \
+    libncurses5 \
+    libncurses5-dev \
+    libreadline7 \
+    libreadline-dev \
+    wget \
+    zlib1g \
+    zlib1g-dev \
+    zip \
+    && wget http://http.us.debian.org/debian/pool/main/o/openssl/libssl1.1_1.1.0h-2_amd64.deb \
+    && wget http://http.us.debian.org/debian/pool/main/o/openssl/libssl-dev_1.1.0h-2_amd64.deb \
+    && dpkg -i /libssl1.1_1.1.0h-2_amd64.deb /libssl-dev_1.1.0h-2_amd64.deb \
+    && apt-get install -f \
+    && cd /usr/local/src/SoftEtherVPN_Stable-* \
+    && ./configure \
+    && make \
+    && make install \
+    && zip -r9 /artifacts.zip /usr/vpn* /usr/bin/vpn* /libssl1.1_1.1.0h-2_amd64.deb
+
+FROM debian:9-slim
+
+COPY --from=build /artifacts.zip /
+
 COPY copyables /
 
-RUN /bin/bash /build-debian.sh \
-    && /bin/rm /build-*.sh
-
-RUN chmod +x /entrypoint.sh /gencert.sh \
-    && rm -rf /opt && ln -s /usr/vpnserver /opt \
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+    libncurses5 \
+    libreadline7 \
+    iptables \
+    unzip \
+    zlib1g \
+    && unzip -o /artifacts.zip -d / \
+    && dpkg -i /libssl1.1_1.1.0h-2_amd64.deb \
+    && apt-get install -f \
+    && rm -rf /var/lib/apt/lists/* \
+    && chmod +x /entrypoint.sh /gencert.sh \
+    && rm /artifacts.zip /libssl1.1_1.1.0h-2_amd64.deb \
+    && rm -rf /opt \
+    && ln -s /usr/vpnserver /opt \
     && find /usr/bin/vpn* -type f ! -name vpnserver \
        -exec bash -c 'ln -s {} /opt/$(basename {})' \;
 
