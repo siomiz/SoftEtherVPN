@@ -7,8 +7,9 @@
 ## Image Tags
 Base OS Image | Latest Stable ([v4.25-9656-rtm](https://github.com/SoftEtherVPN/SoftEtherVPN_Stable/tree/v4.25-9656-rtm))
 ------------- | --
-`centos:7` | **`:latest`**, `:9656`, `:centos`, `:9656-centos`
-`debian:9-slim` | `:debian`, `:9656-debian`
+`centos:7` | **`:latest`**, `:9656`, `4.25`, `:centos`, `:9656-centos`, `4.25-centos`
+`debian:9-slim` | `:debian`, `:9656-debian`, `:4.25-debian`
+`alpine:3.7` | `:alpine`, `:9656-alpine`, `:4.25-alpine`
 
 ## Setup
  - L2TP/IPSec PSK + OpenVPN
