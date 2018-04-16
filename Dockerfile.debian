@@ -45,8 +45,11 @@ COPY copyables /
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
+    libncurses5 \
+    libreadline7 \
     iptables \
     unzip \
+    zlib1g \
     && unzip -o /artifacts.zip -d / \
     && dpkg -i /libssl1.1_1.1.0h-2_amd64.deb \
     && apt-get install -f \
