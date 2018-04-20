@@ -7,7 +7,7 @@
 ## Image Tags
 Base OS Image | Latest Stable ([v4.25-9656-rtm](https://github.com/SoftEtherVPN/SoftEtherVPN_Stable/tree/v4.25-9656-rtm))
 ------------- | --
-`centos:7` | **`:latest`**, `:9656`, `4.25`, `:centos`, `:9656-centos`, `4.25-centos`
+`centos:7` | **`:latest`**, `:9656`, `:4.25`, `:centos`, `:9656-centos`, `4.25-centos`
 `debian:9-slim` | `:debian`, `:9656-debian`, `:4.25-debian`
 `alpine:3.7` | `:alpine`, `:9656-alpine`, `:4.25-alpine`
 
@@ -56,6 +56,17 @@ Dots (.) are part of the password. Password will not be logged if specified via 
 #### Notice ####
 
 If you specify credentials using environment variables (`-e`), they may be revealed via the process list on host (ex. `ps(1)` command) or `docker inspect` command. It is recommended to mount an already-configured SoftEther VPN config file at `/opt/vpn_server.config`, which contains hashed passwords rather than raw ones. The initial setup will be skipped if this file exists at runtime (in entrypoint script). You can obtain this file from a running container using [`docker cp` command](https://docs.docker.com/engine/reference/commandline/cp/).
+
+## Server & Hub Management Commands ##
+
+Management commands can be executed just before the server & hub admin passwords are set via:
+- `-e VPNCMD_SERVER`: `;`-separated [Server management commands](https://www.softether.org/4-docs/1-manual/6._Command_Line_Management_Utility_Manual/6.3_VPN_Server_%2F%2F_VPN_Bridge_Management_Command_Reference_(For_Entire_Server)).
+- `-e VPNCMD_HUB`: `;`-separated [Hub management commands](https://www.softether.org/4-docs/1-manual/6._Command_Line_Management_Utility_Manual/6.4_VPN_Server_%2F%2F_VPN_Bridge_Management_Command_Reference_(For_Virtual_Hub)) (currently only for `DEFAULT` hub).
+
+Example: Set MTU via [`NatSet`](https://www.softether.org/4-docs/1-manual/6._Command_Line_Management_Utility_Manual/6.4_VPN_Server_%2F%2F_VPN_Bridge_Management_Command_Reference_(For_Virtual_Hub)#6.4.97_.22NatSet.22:_Change_Virtual_NAT_Function_Setting_of_SecureNAT_Function) Hub management command:
+`-e VPNCMD_HUB='NatSet /MTU:1500'`
+
+Note that commands run only if the config file is not mounted. Some commands (like `ServerPasswordSet`) will cause problems.
 
 ## OpenVPN ##
 
