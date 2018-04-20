@@ -8,6 +8,17 @@ if [ "$*" == "gencert" ]; then
 
 fi
 
+# check if iptables works (just warns)
+set +e
+iptables -L 2>/dev/null > /dev/null
+if [[ $? -ne 0 ]]
+then
+  echo '# [!!] This image requires --cap-add NET_ADMIN'
+  sleep 7
+  # exit -1
+fi
+set -e
+
 if [ ! -f /usr/vpnserver/vpn_server.config ]; then
 
 : ${PSK:='notasecret'}
@@ -32,12 +43,17 @@ else
   fi
 fi
 
-: ${MTU:='1500'}
-echo "# SecureNat MTU set to $MTU"
-
 printf '# '
 printf '=%.0s' {1..24}
 echo
+
+vpncmd_server () {
+  /usr/bin/vpncmd localhost /SERVER /CSV /CMD "$@"
+}
+
+vpncmd_hub () {
+  /usr/bin/vpncmd localhost /SERVER /CSV /HUB:DEFAULT /CMD "$@"
+}
 
 /usr/bin/vpnserver start 2>&1 > /dev/null
 
@@ -45,27 +61,32 @@ echo
 # switch cipher
 while : ; do
   set +e
-  /usr/bin/vpncmd localhost /SERVER /CSV /CMD ServerCipherSet DHE-RSA-AES256-SHA 2>&1 > /dev/null
+  vpncmd_server ServerCipherSet DHE-RSA-AES256-SHA 2>&1 > /dev/null
   [[ $? -eq 0 ]] && break
   set -e
   sleep 1
 done
 
 # About command to grab version number
-/usr/bin/vpncmd localhost /SERVER /CSV /CMD About | head -2 | tail -1 | sed 's/^/# /;'
+# /usr/bin/vpncmd localhost /SERVER /CSV /CMD About | head -2 | tail -1 | sed 's/^/# /;'
+vpncmd_server About | head -2 | tail -1 | sed 's/^/# /;'
 
 # enable L2TP_IPsec
-/usr/bin/vpncmd localhost /SERVER /CSV /CMD IPsecEnable /L2TP:yes /L2TPRAW:yes /ETHERIP:no /PSK:${PSK} /DEFAULTHUB:DEFAULT
+vpncmd_server IPsecEnable /L2TP:yes /L2TPRAW:yes /ETHERIP:no /PSK:${PSK} /DEFAULTHUB:DEFAULT
 
 # enable SecureNAT
-/usr/bin/vpncmd localhost /SERVER /CSV /HUB:DEFAULT /CMD SecureNatEnable
-/usr/bin/vpncmd localhost /SERVER /CSV /HUB:DEFAULT /CMD NatSet /MTU:$MTU /LOG:no /TCPTIMEOUT:3600 /UDPTIMEOUT:1800
+vpncmd_hub SecureNatEnable
+
+# set MTU
+: ${MTU:='1500'}
+vpncmd_hub NatSet /MTU:$MTU /LOG:no /TCPTIMEOUT:3600 /UDPTIMEOUT:1800
+
 # enable OpenVPN
-/usr/bin/vpncmd localhost /SERVER /CSV /CMD OpenVpnEnable yes /PORTS:1194
+vpncmd_server OpenVpnEnable yes /PORTS:1194
 
 # set server certificate & key
 if [[ -f server.crt && -f server.key ]]; then
-  /usr/bin/vpncmd localhost /SERVER /CSV /CMD ServerCertSet /LOADCERT:server.crt /LOADKEY:server.key
+  vpncmd_server ServerCertSet /LOADCERT:server.crt /LOADKEY:server.key
 
 elif [[ "*${CERT}*" != "**" && "*${KEY}*" != "**" ]]; then
   # server cert/key pair specified via -e
@@ -79,12 +100,12 @@ elif [[ "*${CERT}*" != "**" && "*${KEY}*" != "**" ]]; then
   echo ${KEY} | fold -w 64 >> server.key
   echo -----END PRIVATE KEY----- >> server.key
 
-  /usr/bin/vpncmd localhost /SERVER /CSV /CMD ServerCertSet /LOADCERT:server.crt /LOADKEY:server.key
+  vpncmd_server ServerCertSet /LOADCERT:server.crt /LOADKEY:server.key
   rm server.crt server.key
   export KEY='**'
 fi
 
-/usr/bin/vpncmd localhost /SERVER /CSV /CMD OpenVpnMakeConfig openvpn.zip 2>&1 > /dev/null
+vpncmd_server OpenVpnMakeConfig openvpn.zip 2>&1 > /dev/null
 
 # extract .ovpn config
 unzip -p openvpn.zip *_l3.ovpn > softether.ovpn
@@ -94,15 +115,15 @@ sed -i '/^#/d;s/\r//;/^$/d' softether.ovpn
 cat softether.ovpn
 
 # disable extra logs
-/usr/bin/vpncmd localhost /SERVER /CSV /HUB:DEFAULT /CMD LogDisable packet
-/usr/bin/vpncmd localhost /SERVER /CSV /HUB:DEFAULT /CMD LogDisable security
+vpncmd_hub LogDisable packet
+vpncmd_hub LogDisable security
 
 # add user
 
 adduser () {
     printf " $1"
-    /usr/bin/vpncmd localhost /SERVER /HUB:DEFAULT /CSV /CMD UserCreate $1 /GROUP:none /REALNAME:none /NOTE:none
-    /usr/bin/vpncmd localhost /SERVER /HUB:DEFAULT /CSV /CMD UserPasswordSet $1 /PASSWORD:$2
+    vpncmd_hub UserCreate $1 /GROUP:none /REALNAME:none /NOTE:none
+    vpncmd_hub UserPasswordSet $1 /PASSWORD:$2
 }
 
 printf '# Creating user(s):'
@@ -125,19 +146,34 @@ echo
 export USERS='**'
 export PASSWORD='**'
 
+# handle VPNCMD_* commands right before setting admin passwords
+if [[ $VPNCMD_SERVER ]]
+then
+  while IFS=";" read -ra CMD; do
+    vpncmd_server "$CMD"
+  done <<< "$VPNCMD_SERVER"
+fi
+
+if [[ $VPNCMD_HUB ]]
+then
+  while IFS=";" read -ra CMD; do
+    vpncmd_hub "$CMD"
+  done <<< "$VPNCMD_HUB"
+fi
+
 # set password for hub
 : ${HPW:=$(cat /dev/urandom | tr -dc 'A-Za-z0-9' | fold -w 16 | head -n 1)}
-/usr/bin/vpncmd localhost /SERVER /HUB:DEFAULT /CSV /CMD SetHubPassword ${HPW}
+vpncmd_hub SetHubPassword ${HPW}
 
 # set password for server
 : ${SPW:=$(cat /dev/urandom | tr -dc 'A-Za-z0-9' | fold -w 20 | head -n 1)}
-/usr/bin/vpncmd localhost /SERVER /CSV /CMD ServerPasswordSet ${SPW}
+vpncmd_server ServerPasswordSet ${SPW}
 
 /usr/bin/vpnserver stop 2>&1 > /dev/null
 
 # while-loop to wait until server goes away
 set +e
-while [[ $(pidof vpnserver)  ]] > /dev/null; do sleep 1; done
+while [[ $(pidof vpnserver) ]] > /dev/null; do sleep 1; done
 set -e
 
 echo \# [initial setup OK]
