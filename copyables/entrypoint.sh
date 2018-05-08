@@ -150,14 +150,14 @@ export PASSWORD='**'
 if [[ $VPNCMD_SERVER ]]
 then
   while IFS=";" read -ra CMD; do
-    vpncmd_server "$CMD"
+    vpncmd_server $CMD
   done <<< "$VPNCMD_SERVER"
 fi
 
 if [[ $VPNCMD_HUB ]]
 then
   while IFS=";" read -ra CMD; do
-    vpncmd_hub "$CMD"
+    vpncmd_hub $CMD
   done <<< "$VPNCMD_HUB"
 fi
 
