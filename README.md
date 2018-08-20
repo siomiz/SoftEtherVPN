@@ -5,11 +5,12 @@
 <sup>*</sup> "Simple" as in no configuration parameter is needed for a single-user SecureNAT setup.
 
 ## Image Tags
-Base OS Image | Latest Stable ([v4.25-9656-rtm](https://github.com/SoftEtherVPN/SoftEtherVPN_Stable/tree/v4.25-9656-rtm))
+Base OS Image | Latest Stable ([v4.27-9668-beta](https://github.com/SoftEtherVPN/SoftEtherVPN_Stable/tree/v4.27-9668-beta)) | [v4.25-9656-rtm](https://github.com/SoftEtherVPN/SoftEtherVPN_Stable/tree/v4.25-9656-rtm)
 ------------- | --
-`centos:7` | **`:latest`**, `:9656`, `:4.25`, `:centos`, `:9656-centos`, `4.25-centos`
-`debian:9-slim` | `:debian`, `:9656-debian`, `:4.25-debian`
-`alpine:3.7` | `:alpine`, `:9656-alpine`, `:4.25-alpine`
+`centos:7` | **`:latest`**, `:centos`, `:9668`, `:4.27`, `:9668-centos`, `:4.27-centos` | `:9656`, `:4.25`, `:9656-centos`, `4.25-centos`
+`debian:9-slim` | `:debian`, `:9668-debian`, `:4.27-debian` | `:9656-debian`, `:4.25-debian`
+`alpine:3.7` | `:alpine`, `:9668-alpine`, `:4.27-alpine` | `:9656-alpine`, `:4.25-alpine`
+`ubuntu:18.04` | `:ubuntu`, `:9668-ubuntu`, `:4.27-ubuntu` | -
 
 ## Setup
  - L2TP/IPSec PSK + OpenVPN
@@ -56,6 +57,18 @@ Dots (.) are part of the password. Password will not be logged if specified via 
 #### Notice ####
 
 If you specify credentials using environment variables (`-e`), they may be revealed via the process list on host (ex. `ps(1)` command) or `docker inspect` command. It is recommended to mount an already-configured SoftEther VPN config file at `/opt/vpn_server.config`, which contains hashed passwords rather than raw ones. The initial setup will be skipped if this file exists at runtime (in entrypoint script). You can obtain this file from a running container using [`docker cp` command](https://docs.docker.com/engine/reference/commandline/cp/).
+
+## Configurations ##
+
+To make the server configurations persistent beyond the container lifecycle (i.e. to make the config survive a restart), mount a complete config file at `/usr/vpnserver/vpn_server.config`. If this file is mounted the initial setup will be skipped.
+To obtain a config file template, `docker run` the initial setup with Server & Hub passwords, then `docker cp` out the config file:
+
+    $ docker run --name vpnconf -e SPW=<serverpw> -e HPW=<hubpw> siomiz/softethervpn echo
+    $ docker cp vpnconf:/usr/vpnserver/vpn_server.config /path/to/vpn_server.config
+    $ docker rm vpnconf
+    $ docker run ... -v /path/to/vpn_server.config:/usr/vpnserver/vpn_server.config siomiz/softethervpn
+
+Refer to [SoftEther VPN Server Administration manual](https://www.softether.org/4-docs/1-manual/3._SoftEther_VPN_Server_Manual/3.3_VPN_Server_Administration) for more information.
 
 ## Server & Hub Management Commands ##
 
