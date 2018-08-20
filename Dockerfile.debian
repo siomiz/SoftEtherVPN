@@ -45,6 +45,7 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends \
     libncurses5 \
     libreadline7 \
+    libssl1.1 \
     iptables \
     unzip \
     zlib1g \
