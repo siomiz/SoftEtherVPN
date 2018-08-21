@@ -12,35 +12,51 @@ RUN wget https://github.com/SoftEtherVPN/SoftEtherVPN_Stable/archive/v${BUILD_VE
     && tar -x -C /usr/local/src/ -f v${BUILD_VERSION}.tar.gz \
     && rm v${BUILD_VERSION}.tar.gz
 
-FROM alpine:3.7 as build
+FROM ubuntu:18.04 as build
 
 COPY --from=prep /usr/local/src /usr/local/src
 
-ENV LANG=en_US.UTF-8
-
-RUN apk add -U build-base ncurses-dev openssl-dev readline-dev zip \
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+    build-essential \
+    libncurses5 \
+    libncurses5-dev \
+    libreadline7 \
+    libreadline-dev \
+    libssl1.1 \
+    libssl-dev \
+    wget \
+    zlib1g \
+    zlib1g-dev \
+    zip \
     && cd /usr/local/src/SoftEtherVPN_Stable-* \
     && ./configure \
     && make \
     && make install \
     && zip -r9 /artifacts.zip /usr/vpn* /usr/bin/vpn*
 
-FROM alpine:3.7
+FROM ubuntu:18.04
 
 COPY --from=build /artifacts.zip /
 
 COPY copyables /
 
-ENV LANG=en_US.UTF-8
-
-RUN apk add -U --no-cache bash iptables openssl-dev \
-    && chmod +x /entrypoint.sh /gencert.sh \
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+    libncurses5 \
+    libreadline7 \
+    libssl1.1 \
+    iptables \
+    unzip \
+    zlib1g \
     && unzip -o /artifacts.zip -d / \
+    && rm -rf /var/lib/apt/lists/* \
+    && chmod +x /entrypoint.sh /gencert.sh \
     && rm /artifacts.zip \
     && rm -rf /opt \
     && ln -s /usr/vpnserver /opt \
     && find /usr/bin/vpn* -type f ! -name vpnserver \
-       -exec sh -c 'ln -s {} /opt/$(basename {})' \;
+       -exec bash -c 'ln -s {} /opt/$(basename {})' \;
 
 WORKDIR /usr/vpnserver/
 
