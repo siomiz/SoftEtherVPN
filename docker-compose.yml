@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+  app:
+    image: siomiz/softethervpn
+    volumes:
+      - ./vpn_server.config:/usr/vpnserver/vpn_server.config
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - 500:500/udp
+      - 4500:4500/udp
+      - 1701:1701/tcp
+      - 1194:1194/udp
+      - 5555:5555/tcp

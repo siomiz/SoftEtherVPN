@@ -23,6 +23,7 @@ RUN apk add -U build-base ncurses-dev openssl-dev readline-dev zip \
     && ./configure \
     && make \
     && make install \
+    && touch /usr/vpnserver/vpn_server.config \
     && zip -r9 /artifacts.zip /usr/vpn* /usr/bin/vpn*
 
 FROM alpine:3.7

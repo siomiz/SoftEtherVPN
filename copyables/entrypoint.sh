@@ -19,7 +19,9 @@ then
 fi
 set -e
 
-if [ ! -f /usr/vpnserver/vpn_server.config ]; then
+CONFIG=/usr/vpnserver/vpn_server.config
+
+if [ ! -f $CONFIG ] || [ ! -s $CONFIG ]; then
 
 : ${PSK:='notasecret'}
 
@@ -177,6 +179,10 @@ while [[ $(pidof vpnserver) ]] > /dev/null; do sleep 1; done
 set -e
 
 echo \# [initial setup OK]
+
+else
+
+echo \# [running with existing config]
 
 fi
 

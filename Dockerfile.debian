@@ -33,6 +33,7 @@ RUN apt-get update \
     && ./configure \
     && make \
     && make install \
+    && touch /usr/vpnserver/vpn_server.config \
     && zip -r9 /artifacts.zip /usr/vpn* /usr/bin/vpn*
 
 FROM debian:9-slim

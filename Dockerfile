@@ -23,6 +23,7 @@ RUN yum -y update \
     && ./configure \
     && make \
     && make install \
+    && touch /usr/vpnserver/vpn_server.config \
     && zip -r9 /artifacts.zip /usr/vpn* /usr/bin/vpn*
 
 FROM centos:7
