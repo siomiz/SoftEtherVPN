@@ -15,5 +15,9 @@ matrix:
       env: BUILDFILE=Dockerfile.ubuntu
 
 script:
-  - docker build -f ${BUILDFILE} .
-
+  - docker build -f ${BUILDFILE} -t softethervpn .
+  - docker run softethervpn echo "[Travis CI OK]"
+  - docker network create --subnet 172.18.0.0/16 test-ipsec
+  - docker run -d --cap-add NET_ADMIN -e USERNAME=test -e PASSWORD=test --network test-ipsec --ip 172.18.0.3 softethervpn
+  - sudo bash tests/prepare-ipsec.sh
+  - sudo bash tests/test-ipsec.sh
