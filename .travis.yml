@@ -14,9 +14,6 @@ matrix:
     - name: Ubuntu
       env: BUILDFILE=Dockerfile.ubuntu
 
-jobs:
-  include:
-    - stage: Docker Build
-      script:
-      - docker build -f ${BUILDFILE} .
+script:
+  - docker build -f ${BUILDFILE} .
 
