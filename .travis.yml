@@ -1,51 +1,22 @@
-dist: trusty
-sudo: required
+language: ruby
+
+services:
+  - docker
+
+matrix:
+  include:
+    - name: CentOS
+      env: BUILDFILE=Dockerfile
+    - name: Alpine
+      env: BUILDFILE=Dockerfile.alpine
+    - name: Debian
+      env: BUILDFILE=Dockerfile.debian
+    - name: Ubuntu
+      env: BUILDFILE=Dockerfile.ubuntu
 
 jobs:
   include:
     - stage: Docker Build
       script:
-      - docker build -f Dockerfile .
-    - script:
-      - docker build -f Dockerfile.alpine .
-    - script:
-      - docker build -f Dockerfile.debian .
-    - script:
-      - docker build -f Dockerfile.ubuntu .
-    - stage: Test
-      script:
-      - docker build -t softethervpn -f Dockerfile .
-      - docker run softethervpn echo "[Travis CI OK]"
-    - script:
-      - docker build -t softethervpn-alpine -f Dockerfile.alpine .
-      - docker run softethervpn-alpine echo "[Travis CI OK]"
-    - script:
-      - docker build -t softethervpn-debian -f Dockerfile.debian .
-      - docker run softethervpn-debian echo "[Travis CI OK]"
-    - script:
-      - docker build -t softethervpn-ubuntu -f Dockerfile.ubuntu .
-      - docker run softethervpn-ubuntu echo "[Travis CI OK]"
-    - script:
-      - docker build -t softethervpn -f Dockerfile .
-      - docker network create --subnet 172.18.0.0/16 test-ipsec
-      - docker run -d --cap-add NET_ADMIN -e USERNAME=test -e PASSWORD=test --network test-ipsec --ip 172.18.0.3 softethervpn
-      - sudo bash tests/prepare-ipsec.sh
-      - sudo bash tests/test-ipsec.sh
-    - script:
-      - docker build -t softethervpn-alpine -f Dockerfile.alpine .
-      - docker network create --subnet 172.18.0.0/16 test-ipsec
-      - docker run -d --cap-add NET_ADMIN -e USERNAME=test -e PASSWORD=test --network test-ipsec --ip 172.18.0.3 softethervpn-alpine
-      - sudo bash tests/prepare-ipsec.sh
-      - sudo bash tests/test-ipsec.sh
-    - script:
-      - docker build -t softethervpn-debian -f Dockerfile.debian .
-      - docker network create --subnet 172.18.0.0/16 test-ipsec
-      - docker run -d --cap-add NET_ADMIN -e USERNAME=test -e PASSWORD=test --network test-ipsec --ip 172.18.0.3 softethervpn-debian
-      - sudo bash tests/prepare-ipsec.sh
-      - sudo bash tests/test-ipsec.sh
-    - script:
-      - docker build -t softethervpn-ubuntu -f Dockerfile.ubuntu .
-      - docker network create --subnet 172.18.0.0/16 test-ipsec
-      - docker run -d --cap-add NET_ADMIN -e USERNAME=test -e PASSWORD=test --network test-ipsec --ip 172.18.0.3 softethervpn-ubuntu
-      - sudo bash tests/prepare-ipsec.sh
-      - sudo bash tests/test-ipsec.sh
+      - docker build -f ${BUILDFILE} .
+
