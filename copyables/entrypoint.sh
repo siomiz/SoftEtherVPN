@@ -50,14 +50,14 @@ printf '=%.0s' {1..24}
 echo
 
 vpncmd_server () {
-  /usr/bin/vpncmd localhost /SERVER /CSV /CMD "$@"
+  /usr/local/bin/vpncmd localhost /SERVER /CSV /CMD "$@"
 }
 
 vpncmd_hub () {
-  /usr/bin/vpncmd localhost /SERVER /CSV /HUB:DEFAULT /CMD "$@"
+  /usr/local/bin/vpncmd localhost /SERVER /CSV /HUB:DEFAULT /CMD "$@"
 }
 
-/usr/bin/vpnserver start 2>&1 > /dev/null
+/usr/local/bin/vpnserver start 2>&1 > /dev/null
 
 # while-loop to wait until server comes up
 # switch cipher
@@ -171,7 +171,7 @@ vpncmd_hub SetHubPassword ${HPW}
 : ${SPW:=$(cat /dev/urandom | tr -dc 'A-Za-z0-9' | fold -w 20 | head -n 1)}
 vpncmd_server ServerPasswordSet ${SPW}
 
-/usr/bin/vpnserver stop 2>&1 > /dev/null
+/usr/local/bin/vpnserver stop 2>&1 > /dev/null
 
 # while-loop to wait until server goes away
 set +e
