@@ -1,8 +1,8 @@
 #!/bin/bash
 set -x
 
-SE_VERSION="4.28"
-SE_REVISION="9669"
+SE_VERSION="4.29"
+SE_REVISION="9680"
 
 BASE_TAGS="latest centos debian alpine ubuntu"
 

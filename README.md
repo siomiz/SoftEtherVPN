@@ -8,7 +8,7 @@
 Base OS Image | Latest Stable ([v4.29-9680-rtm](https://github.com/SoftEtherVPN/SoftEtherVPN_Stable/tree/v4.29-9680-rtm)) | [v4.25-9656-rtm](https://github.com/SoftEtherVPN/SoftEtherVPN_Stable/tree/v4.25-9656-rtm)
 ------------- | -- | --
 `centos:7` | **`:latest`**, `:centos`, `:9680`, `:4.29`, `:9680-centos`, `:4.29-centos` | `:9656`, `:4.25`, `:9656-centos`, `4.25-centos`
-`debian:9-slim` | `:debian`, `:9680-debian`, `:4.29-debian` | `:9656-debian`, `:4.25-debian`
+`debian:10-slim` | `:debian`, `:9680-debian`, `:4.29-debian` | `:9656-debian`, `:4.25-debian`
 `alpine:3.9` | `:alpine`, `:9680-alpine`, `:4.29-alpine` | `:9656-alpine`, `:4.25-alpine`
 `ubuntu:18.04` | `:ubuntu`, `:9680-ubuntu`, `:4.29-ubuntu` | -
 
