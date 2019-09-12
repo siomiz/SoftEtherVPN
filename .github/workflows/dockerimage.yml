@@ -1,0 +1,21 @@
+name: Docker Image CI
+
+on: [push, pull_request]
+
+jobs:
+
+  build-latest:
+    name: Docker image :latest, :centos
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Build Docker image (:latest, :centos)
+      run: docker build . --file Dockerfile --tag vpn
+      
+  build-alpine:
+    name: Docker image :alpine
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Build Docker image (:alpine)
+      run: docker build . --file Dockerfile.alpine --tag vpna
