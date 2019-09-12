@@ -1,0 +1,32 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - '*'
+      - '!README.md'
+  pull_request:
+    paths:
+      - '*'
+      - '!README.md'
+
+jobs:
+
+  build:
+    name: Build Docker image
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        tag: [centos, alpine, debian, ubuntu]
+    steps:
+    - uses: actions/checkout@v1
+    - name: Build Docker image
+      run: docker build . --file Dockerfile.${{ matrix.tag }} --tag vpn
+    - name: Test IPsec connection
+      run: |
+        docker network create --subnet 172.18.0.0/16 test-ipsec
+        docker run -d --cap-add NET_ADMIN -e USERNAME=test -e PASSWORD=test --network test-ipsec --ip 172.18.0.3 vpn
+        sudo bash tests/prepare-ipsec.sh
+        sudo bash tests/test-ipsec.sh
