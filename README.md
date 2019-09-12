@@ -1,6 +1,6 @@
 # A simple<sup>*</sup> [SoftEther VPN][1] server Docker image
 
-`:latest` = [![Travis](https://img.shields.io/travis/siomiz/SoftEtherVPN/master.svg?style=flat-square)](https://travis-ci.org/siomiz/SoftEtherVPN)
+![](https://github.com/siomiz/SoftEtherVPN/workflows/Docker%20Image%20CI/badge.svg)
 
 <sup>*</sup> "Simple" as in no configuration parameter is needed for a single-user SecureNAT setup.
 
