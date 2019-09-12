@@ -5,17 +5,14 @@ on: [push, pull_request]
 jobs:
 
   build:
-    name: Build Docker images
+    name: Build Docker image
     runs-on: ubuntu-latest
     strategy:
       matrix:
         tag: [alpine, debian, ubuntu]
-        include:
-          - tag: latest
-            dockerfile: Dockerfile
     steps:
     - uses: actions/checkout@v1
-    - name: Build Docker image (${{ matrix.tag }})
+    - name: Build Docker image
       run: docker build . --file Dockerfile.${{ matrix.tag }} --tag vpn
     - name: IPsec connection test
       run: |
