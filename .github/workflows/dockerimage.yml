@@ -9,12 +9,12 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        tag: [alpine, debian, ubuntu]
+        tag: [centos, alpine, debian, ubuntu]
     steps:
     - uses: actions/checkout@v1
     - name: Build Docker image
       run: docker build . --file Dockerfile.${{ matrix.tag }} --tag vpn
-    - name: IPsec connection test
+    - name: Test IPsec connection
       run: |
         docker network create --subnet 172.18.0.0/16 test-ipsec
         docker run -d --cap-add NET_ADMIN -e USERNAME=test -e PASSWORD=test --network test-ipsec --ip 172.18.0.3 vpn
