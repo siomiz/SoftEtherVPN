@@ -4,24 +4,22 @@ on: [push, pull_request]
 
 jobs:
 
-  build-latest:
-    name: Docker image :latest, :centos
+  build:
+    name: Build Docker images
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        tag: [alpine, debian, ubuntu]
+        include:
+          - tag: latest
+            dockerfile: Dockerfile
     steps:
     - uses: actions/checkout@v1
-    - name: Build Docker image (:latest, :centos)
-      run: docker build . --file Dockerfile --tag vpn
+    - name: Build Docker image (${{ matrix.tag }})
+      run: docker build . --file Dockerfile.${{ matrix.tag }} --tag vpn
     - name: IPsec connection test
       run: |
         docker network create --subnet 172.18.0.0/16 test-ipsec
         docker run -d --cap-add NET_ADMIN -e USERNAME=test -e PASSWORD=test --network test-ipsec --ip 172.18.0.3 vpn
         sudo bash tests/prepare-ipsec.sh
         sudo bash tests/test-ipsec.sh
-      
-  build-alpine:
-    name: Docker image :alpine
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v1
-    - name: Build Docker image (:alpine)
-      run: docker build . --file Dockerfile.alpine --tag vpna
