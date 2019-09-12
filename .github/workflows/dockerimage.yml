@@ -1,6 +1,16 @@
 name: Docker Image CI
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - '*'
+      - '!README.md'
+  pull_request:
+    paths:
+      - '*'
+      - '!README.md'
 
 jobs:
 
