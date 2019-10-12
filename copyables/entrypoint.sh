@@ -120,6 +120,10 @@ cat softether.ovpn
 vpncmd_hub LogDisable packet
 vpncmd_hub LogDisable security
 
+# force user-mode SecureNAT
+vpncmd_hub ExtOptionSet DisableIpRawModeSecureNAT /VALUE:true
+vpncmd_hub ExtOptionSet DisableKernelModeSecureNAT /VALUE:true
+
 # add user
 
 adduser () {
