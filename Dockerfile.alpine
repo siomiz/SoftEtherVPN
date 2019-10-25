@@ -34,7 +34,7 @@ COPY copyables /
 
 ENV LANG=en_US.UTF-8
 
-RUN apk add -U --no-cache bash curl iptables openssl openssl-dev tar \
+RUN apk add -U --no-cache bash curl gnupg iptables openssl openssl-dev tar \
     && chmod +x /*.sh \
     && unzip -o /artifacts.zip -d / \
     && rm /artifacts.zip \
