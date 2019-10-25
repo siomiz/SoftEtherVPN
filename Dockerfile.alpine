@@ -3,8 +3,8 @@ FROM alpine:3.9 as prep
 LABEL maintainer="Tomohisa Kusano <siomiz@gmail.com>" \
       contributors="See CONTRIBUTORS file <https://github.com/siomiz/SoftEtherVPN/blob/master/CONTRIBUTORS>"
 
-ENV BUILD_VERSION=4.29-9680-rtm \
-    SHA256_SUM=c19cd49835c613cb5551ce66c91f90da3d3496ab3e15e8c61e22b464dc55d9b0
+ENV BUILD_VERSION=4.30-9700-beta \
+    SHA256_SUM=f579fa938f6d5d0622f23b3c163b3de5dc171e30175e44511bf269b3bb9fb1fc
 
 RUN wget https://github.com/SoftEtherVPN/SoftEtherVPN_Stable/archive/v${BUILD_VERSION}.tar.gz \
     && echo "${SHA256_SUM}  v${BUILD_VERSION}.tar.gz" | sha256sum -c \
@@ -34,8 +34,8 @@ COPY copyables /
 
 ENV LANG=en_US.UTF-8
 
-RUN apk add -U --no-cache bash iptables openssl-dev \
-    && chmod +x /entrypoint.sh /gencert.sh \
+RUN apk add -U --no-cache bash curl iptables openssl openssl-dev tar \
+    && chmod +x /*.sh \
     && unzip -o /artifacts.zip -d / \
     && rm /artifacts.zip \
     && rm -rf /opt \

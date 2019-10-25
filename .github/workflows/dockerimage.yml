@@ -27,6 +27,12 @@ jobs:
     - name: Test IPsec connection
       run: |
         docker network create --subnet 172.18.0.0/16 test-ipsec
-        docker run -d --cap-add NET_ADMIN -e USERNAME=test -e PASSWORD=test --network test-ipsec --ip 172.18.0.3 vpn
+        docker run -d --cap-add NET_ADMIN --cap-add SYSLOG -e USERNAME=test -e PASSWORD=test --network test-ipsec --ip 172.18.0.3 vpn
         sudo bash tests/prepare-ipsec.sh
         sudo bash tests/test-ipsec.sh
+    - name: Test OpenVPN connection
+      run: |
+        docker network create --subnet 172.30.0.0/16 test-openvpn
+        docker run -d --cap-add NET_ADMIN --cap-add SYSLOG -e USERNAME=test -e PASSWORD=test --network test-openvpn --ip 172.30.0.3 --name vpntest-openvpn vpn
+        sudo bash tests/prepare-openvpn.sh
+        sudo bash tests/test-openvpn.sh

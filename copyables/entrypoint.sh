@@ -105,18 +105,38 @@ elif [[ "*${CERT}*" != "**" && "*${KEY}*" != "**" ]]; then
   vpncmd_server ServerCertSet /LOADCERT:server.crt /LOADKEY:server.key
   rm server.crt server.key
   export KEY='**'
+
+else
+
+  /gencert-easyrsa.sh
+  cp pki/ca.crt chain_certs
+  vpncmd_server ServerCertSet /LOADCERT:pki/issued/server.crt /LOADKEY:pki/private/server.key
+
 fi
 
 vpncmd_server OpenVpnMakeConfig openvpn.zip 2>&1 > /dev/null
 
 # extract .ovpn config
 unzip -p openvpn.zip *_l3.ovpn > softether.ovpn
-# delete "#" comments, \r, and empty lines
-sed -i '/^#/d;s/\r//;/^$/d' softether.ovpn
+# delete "#" comments, ";" comments, \r, and empty lines
+sed -i '/^[#;]/d;s/\r//;/^$/d' softether.ovpn
+# add ca/cert/key if (auto)created
+if [[ -f pki/ca.crt ]]; then
+  echo '<ca>' >> softether.ovpn
+  cat pki/ca.crt >> softether.ovpn
+  echo '</ca>' >> softether.ovpn
+  echo '<cert>' >> softether.ovpn
+  cat pki/issued/client.crt >> softether.ovpn
+  echo '</cert>' >> softether.ovpn
+  echo '<key>' >> softether.ovpn
+  cat pki/private/client.key >> softether.ovpn
+  echo '</key>' >> softether.ovpn
+fi
 # send to stdout
 cat softether.ovpn
 
 # disable extra logs
+vpncmd_server SyslogDisable
 vpncmd_hub LogDisable packet
 vpncmd_hub LogDisable security
 
