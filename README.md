@@ -70,6 +70,14 @@ To obtain a config file template, `docker run` the initial setup with Server & H
 
 Refer to [SoftEther VPN Server Administration manual](https://www.softether.org/4-docs/1-manual/3._SoftEther_VPN_Server_Manual/3.3_VPN_Server_Administration) for more information.
 
+## Logging ##
+
+By default SoftEther has a very verbose logging system. For privacy or space constraints, this may not be desirable. The easiest way to solve this create a dummy volume to log to /dev/null. In your docker run you can use the following volume variables to remove logs entirely.
+```
+-v /dev/null:/usr/vpnserver/server_log \
+-v /dev/null:/usr/vpnserver/packet_log \
+-v /dev/null:/usr/vpnserver/security_log
+```
 ## Server & Hub Management Commands ##
 
 Management commands can be executed just before the server & hub admin passwords are set via:
