@@ -45,7 +45,7 @@ RUN yum -y update \
 
 WORKDIR /usr/vpnserver/
 
-VOLUME ["/usr/vpnserver/server_log/"]
+VOLUME ["/usr/vpnserver/server_log/", "/usr/vpnserver/packet_log/", "/usr/vpnserver/security_log/"]
 
 ENTRYPOINT ["/entrypoint.sh"]
 
