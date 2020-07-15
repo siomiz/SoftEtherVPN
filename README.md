@@ -5,12 +5,12 @@
 <sup>*</sup> "Simple" as in no configuration parameter is needed for a single-user SecureNAT setup.
 
 ## Image Tags
-Base OS Image | Latest Stable ([v4.29-9680-rtm](https://github.com/SoftEtherVPN/SoftEtherVPN_Stable/tree/v4.29-9680-rtm)) | [v4.25-9656-rtm](https://github.com/SoftEtherVPN/SoftEtherVPN_Stable/tree/v4.25-9656-rtm)
-------------- | -- | --
-`centos:7` | **`:latest`**, `:centos`, `:9680`, `:4.29`, `:9680-centos`, `:4.29-centos` | `:9656`, `:4.25`, `:9656-centos`, `4.25-centos`
-`debian:10-slim` | `:debian`, `:9680-debian`, `:4.29-debian` | `:9656-debian`, `:4.25-debian`
-`alpine:3.9` | `:alpine`, `:9680-alpine`, `:4.29-alpine` | `:9656-alpine`, `:4.25-alpine`
-`ubuntu:18.04` | `:ubuntu`, `:9680-ubuntu`, `:4.29-ubuntu` | -
+Base OS Image | Latest Stable ([v4.34-9745-beta](https://github.com/SoftEtherVPN/SoftEtherVPN_Stable/tree/v4.34-9745-beta)) | Previous Base | [v4.29-9680-rtm](https://github.com/SoftEtherVPN/SoftEtherVPN_Stable/tree/v4.29-9680-rtm)
+------------- | -- | -- | --
+`centos:8` | **`:latest`**, `:centos`, `:9745`, `:4.34`, `:9745-centos`, `:4.34-centos` | `centos:7` | `:9680`, `:4.29`, `:9680-centos`, `4.29-centos`
+`debian:10-slim` | `:debian`, `:9745-debian`, `:4.34-debian` | `debian:10-slim` | `:9680-debian`, `:4.29-debian`
+`alpine:3.12` | `:alpine`, `:9745-alpine`, `:4.34-alpine` | `alpine:3.9` | `:9680-alpine`, `:4.29-alpine`
+`ubuntu:20.04` | `:ubuntu`, `:9745-ubuntu`, `:4.34-ubuntu` | `ubuntu:18.04` | `:9680-ubuntu`, `:4.29-ubuntu`
 
 ## Setup
  - L2TP/IPSec PSK + OpenVPN
