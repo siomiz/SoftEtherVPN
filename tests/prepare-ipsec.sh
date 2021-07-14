@@ -62,6 +62,6 @@ EOF
 mkdir -p /var/run/xl2tpd
 touch /var/run/xl2tpd/l2tp-control
 
-service strongswan restart
+service ipsec restart
 service xl2tpd restart
 
