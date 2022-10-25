@@ -36,6 +36,7 @@ jobs:
         file: Dockerfile.${{ matrix.tag }}
         platforms: linux/amd64,linux/arm64,linux/arm/v7
         push: false
+        load: true
         tags: vpn
     - name: Test IPsec connection
       run: |
