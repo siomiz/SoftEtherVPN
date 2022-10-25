@@ -15,7 +15,7 @@ on:
 jobs:
 
   build:
-    name: Build, Test, and Push Docker image
+    name: Build Docker image
     runs-on: ubuntu-latest
     strategy:
       matrix:
