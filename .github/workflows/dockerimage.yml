@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        tag: [fedora, alpine, debian, ubuntu]
+        tag: [alpine, debian, ubuntu]
     steps:
     - uses: actions/checkout@v3
     - uses: docker/setup-qemu-action@v2
