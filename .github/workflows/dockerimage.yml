@@ -63,6 +63,6 @@ jobs:
         context: .
         file: Dockerfile.${{ matrix.tag }}
         platforms: linux/amd64,linux/arm64,linux/arm/v7
-        push: true
+        push: github.event_name != 'pull_request'
         tags: siomiz/softethervpn:${{ matrix.tag }}
 
