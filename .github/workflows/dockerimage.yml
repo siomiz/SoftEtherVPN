@@ -27,14 +27,11 @@ jobs:
         platforms: linux/amd64,linux/arm64,linux/arm/v7
     - id: buildx
       uses: docker/setup-buildx-action@v2
-    - name: Build Docker image
+    - name: Build Docker image for testing
       uses: docker/build-push-action@v2
       with:
-        # run: docker build . --file Dockerfile.${{ matrix.tag }} --tag vpn
-        builder: ${{ steps.buildx.outputs.name }}
         context: .
         file: Dockerfile.${{ matrix.tag }}
-        platforms: linux/amd64,linux/arm64,linux/arm/v7
         push: false
         load: true
         tags: vpn
@@ -44,3 +41,12 @@ jobs:
         docker run -d --cap-add NET_ADMIN -e USERNAME=test -e PASSWORD=test --network test-ipsec --ip 172.18.0.3 vpn
         sudo bash tests/prepare-ipsec.sh
         sudo bash tests/test-ipsec.sh
+    - name: Buildx Docker image
+      uses: docker/build-push-action@v2
+      with:
+        builder: ${{ steps.buildx.outputs.name }}
+        context: .
+        file: Dockerfile.${{ matrix.tag }}
+        platforms: linux/amd64,linux/arm64,linux/arm/v7
+        push: false
+        tags: siomiz/softethervpn:${{ matrix.tag }}
