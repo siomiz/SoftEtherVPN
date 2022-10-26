@@ -1,10 +1,10 @@
 #!/bin/bash
 set -x
 
-SE_VERSION="4.38"
-SE_REVISION="9760"
+SE_VERSION="4.39"
+SE_REVISION="9772"
 
-BASE_TAGS="latest centos debian alpine ubuntu"
+BASE_TAGS="latest debian alpine ubuntu"
 
 for TAG in ${BASE_TAGS}; do
   docker pull siomiz/softethervpn:${TAG}

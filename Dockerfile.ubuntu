@@ -1,10 +1,10 @@
-FROM alpine:3.14 as prep
+FROM alpine:3.16 as prep
 
 LABEL maintainer="Tomohisa Kusano <siomiz@gmail.com>" \
       contributors="See CONTRIBUTORS file <https://github.com/siomiz/SoftEtherVPN/blob/master/CONTRIBUTORS>"
 
-ENV BUILD_VERSION=4.38-9760-rtm \
-    SHA256_SUM=7701dfb76b888d4adde19d9a39d0919681f6c091f3eb5295ec8caf0439eb3a1a
+ENV BUILD_VERSION=4.39-9772-beta \
+    SHA256_SUM=5c538e35e1639ce9a55a31be0b66af224462b84caf0ebf831f1e56efe6f9924a
 
 RUN wget https://github.com/SoftEtherVPN/SoftEtherVPN_Stable/archive/v${BUILD_VERSION}.tar.gz \
     && echo "${SHA256_SUM}  v${BUILD_VERSION}.tar.gz" | sha256sum -c \
@@ -12,7 +12,7 @@ RUN wget https://github.com/SoftEtherVPN/SoftEtherVPN_Stable/archive/v${BUILD_VE
     && tar -x -C /usr/local/src/ -f v${BUILD_VERSION}.tar.gz \
     && rm v${BUILD_VERSION}.tar.gz
 
-FROM ubuntu:20.04 as build
+FROM ubuntu:22.04 as build
 
 COPY --from=prep /usr/local/src /usr/local/src
 
@@ -23,7 +23,7 @@ RUN apt-get update \
     libncurses5-dev \
     libreadline8 \
     libreadline-dev \
-    libssl1.1 \
+    libssl3 \
     libssl-dev \
     wget \
     zlib1g \
@@ -36,7 +36,7 @@ RUN apt-get update \
     && touch /usr/vpnserver/vpn_server.config \
     && zip -r9 /artifacts.zip /usr/vpn* /usr/bin/vpn*
 
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 
 COPY --from=build /artifacts.zip /
 
@@ -46,7 +46,7 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends \
     libncurses5 \
     libreadline8 \
-    libssl1.1 \
+    libssl3 \
     iptables \
     unzip \
     zlib1g \

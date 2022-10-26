@@ -12,7 +12,7 @@ RUN wget https://github.com/SoftEtherVPN/SoftEtherVPN_Stable/archive/v${BUILD_VE
     && tar -x -C /usr/local/src/ -f v${BUILD_VERSION}.tar.gz \
     && rm v${BUILD_VERSION}.tar.gz
 
-FROM debian:10 as build
+FROM debian:11 as build
 
 COPY --from=prep /usr/local/src /usr/local/src
 
@@ -21,7 +21,7 @@ RUN apt-get update \
     build-essential \
     libncurses6 \
     libncurses-dev \
-    libreadline7 \
+    libreadline8 \
     libreadline-dev \
     libssl1.1 \
     libssl-dev \
@@ -36,7 +36,7 @@ RUN apt-get update \
     && touch /usr/vpnserver/vpn_server.config \
     && zip -r9 /artifacts.zip /usr/vpn* /usr/bin/vpn*
 
-FROM debian:10-slim
+FROM debian:11-slim
 
 COPY --from=build /artifacts.zip /
 
@@ -45,7 +45,7 @@ COPY copyables /
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
     libncurses6 \
-    libreadline7 \
+    libreadline8 \
     libssl1.1 \
     iptables \
     unzip \
