@@ -61,6 +61,7 @@ jobs:
         password: ${{ secrets.DOCKERHUB_TOKEN }}
     - 
       name: Set Docker meta
+
       id: meta
       uses: docker/metadata-action@v4
       with:
@@ -72,6 +73,7 @@ jobs:
           type=raw,value=latest,enable=${{ matrix.tag == 'alpine' }}
           type=raw,value=${{ env.SE_VERSION }},enable=${{ matrix.tag == 'alpine' }}
           type=raw,value=${{ env.SE_REVISION }},enable=${{ matrix.tag == 'alpine' }}
+
     - 
       name: Buildx and push Docker image
       uses: docker/build-push-action@v3
@@ -81,4 +83,5 @@ jobs:
         file: Dockerfile.${{ matrix.tag }}
         platforms: linux/amd64,linux/arm64,linux/arm/v7
         push: ${{ github.event_name != 'pull_request' }}
+
         tags: ${{ steps.meta.outputs.tags }}
