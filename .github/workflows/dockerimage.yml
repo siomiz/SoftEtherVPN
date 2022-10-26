@@ -69,9 +69,11 @@ jobs:
         platforms: linux/amd64,linux/arm64,linux/arm/v7
         push: ${{ github.event_name != 'pull_request' }}
         tags:
-          - 'siomiz/softethervpn:${{ matrix.tag }}'
-          - 'siomiz/softethervpn:${{ matrix.tag }}-${{ env.SE_VERSION }}'
-          - 'siomiz/softethervpn:${{ matrix.tag }}-${{ env.SE_REVISION }}'
+          [
+            'siomiz/softethervpn:${{ matrix.tag }}',
+            'siomiz/softethervpn:${{ matrix.tag }}-${{ env.SE_VERSION }}',
+            'siomiz/softethervpn:${{ matrix.tag }}-${{ env.SE_REVISION }}',
+          ]
     - 
       name: Tag latest and ver/rev numbers
       if: github.event_name != 'pull_request' && matrix.tag == 'alpine'
@@ -84,7 +86,9 @@ jobs:
         platforms: linux/amd64,linux/arm64,linux/arm/v7
         push: ${{ github.event_name != 'pull_request' }}
         tags:
-          - 'siomiz/softethervpn:latest'
-          - 'siomiz/softethervpn:${{ env.SE_VERSION }}'
-          - 'siomiz/softethervpn:${{ env.SE_REVISION }}'
+          [
+            'siomiz/softethervpn:latest',
+            'siomiz/softethervpn:${{ env.SE_VERSION }}',
+            'siomiz/softethervpn:${{ env.SE_REVISION }}',
+          ]
 
