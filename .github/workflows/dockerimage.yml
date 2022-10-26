@@ -67,8 +67,8 @@ jobs:
         images: siomiz/softethervpn
         tags: |
           type=raw,value=${{ matrix.tag }}
-          type=raw,value=${{ matrix.tag }}-${{ env.SE_VERSION }}
-          type=raw,value=${{ matrix.tag }}-${{ env.SE_REVISION }}
+          type=raw,value=${{ env.SE_VERSION }}-${{ matrix.tag }}
+          type=raw,value=${{ env.SE_REVISION }}-${{ matrix.tag }}
           type=raw,value=latest,enable=${{ matrix.tag == 'alpine' }}
           type=raw,value=${{ env.SE_VERSION }},enable=${{ matrix.tag == 'alpine' }}
           type=raw,value=${{ env.SE_REVISION }},enable=${{ matrix.tag == 'alpine' }}
