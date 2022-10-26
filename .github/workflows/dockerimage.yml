@@ -60,6 +60,11 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
     - 
+      name: Set Docker meta
+      uses: docker/metadata-action@v4
+      with:
+        images: siomiz/softethervpn
+    - 
       name: Buildx and push Docker image
       uses: docker/build-push-action@v3
       with:
@@ -68,27 +73,11 @@ jobs:
         file: Dockerfile.${{ matrix.tag }}
         platforms: linux/amd64,linux/arm64,linux/arm/v7
         push: ${{ github.event_name != 'pull_request' }}
-        tags:
-          [
-            'siomiz/softethervpn:${{ matrix.tag }}',
-            'siomiz/softethervpn:${{ matrix.tag }}-${{ env.SE_VERSION }}',
-            'siomiz/softethervpn:${{ matrix.tag }}-${{ env.SE_REVISION }}',
-          ]
-    - 
-      name: Tag latest and ver/rev numbers
-      if: github.event_name != 'pull_request' && matrix.tag == 'alpine'
-      # tagging only, assuming build uses cache from above
-      uses: docker/build-push-action@v3
-      with:
-        builder: ${{ steps.buildx.outputs.name }}
-        context: .
-        file: Dockerfile.${{ matrix.tag }}
-        platforms: linux/amd64,linux/arm64,linux/arm/v7
-        push: ${{ github.event_name != 'pull_request' }}
-        tags:
-          [
-            'siomiz/softethervpn:latest',
-            'siomiz/softethervpn:${{ env.SE_VERSION }}',
-            'siomiz/softethervpn:${{ env.SE_REVISION }}',
-          ]
+        tags: |
+          type=raw,value=${{ matrix.tag }}
+          type=raw,value=${{ matrix.tag }}-${{ env.SE_VERSION }}
+          type=raw,value=${{ matrix.tag }}-${{ env.SE_REVISION }}
+          type=raw,value=latest,enable=${{ matrix.tag == 'alpine' }}
+          type=raw,value=${{ env.SE_VERSION }},enable=${{ matrix.tag == 'alpine' }}
+          type=raw,value=${{ env.SE_REVISION }},enable=${{ matrix.tag == 'alpine' }}
 
