@@ -12,6 +12,10 @@ on:
       - '*'
       - '!README.md'
 
+env:
+  SE_VERSION: 4.39
+  SE_REVISION: 9772
+
 jobs:
 
   build:
@@ -56,6 +60,11 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
     - 
+      name: Set Docker meta
+      uses: docker/metadata-action@v4
+      with:
+        images: siomiz/softethervpn
+    - 
       name: Buildx and push Docker image
       uses: docker/build-push-action@v3
       with:
@@ -64,5 +73,11 @@ jobs:
         file: Dockerfile.${{ matrix.tag }}
         platforms: linux/amd64,linux/arm64,linux/arm/v7
         push: ${{ github.event_name != 'pull_request' }}
-        tags: siomiz/softethervpn:${{ matrix.tag }}
+        tags: |
+          type=raw,value=${{ matrix.tag }}
+          type=raw,value=${{ matrix.tag }}-${{ env.SE_VERSION }}
+          type=raw,value=${{ matrix.tag }}-${{ env.SE_REVISION }}
+          type=raw,value=latest,enable=${{ matrix.tag == 'alpine' }}
+          type=raw,value=${{ env.SE_VERSION }},enable=${{ matrix.tag == 'alpine' }}
+          type=raw,value=${{ env.SE_REVISION }},enable=${{ matrix.tag == 'alpine' }}
 
