@@ -1,4 +1,5 @@
 tests
 .git
+.github
 .travis.yml
 README.md
