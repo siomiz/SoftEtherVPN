@@ -1,6 +1,9 @@
 # Use openSUSE Leap as the base image for the first stage (prep)
 FROM opensuse/leap:latest as prep
 
+# Set the LANG environment variable to a valid locale
+ENV LANG=en_US.UTF-8
+
 LABEL maintainer="Tomohisa Kusano <siomiz@gmail.com>" \
       contributors="See CONTRIBUTORS file <https://github.com/siomiz/SoftEtherVPN/blob/master/CONTRIBUTORS>"
 
