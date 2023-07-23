@@ -1,5 +1,5 @@
 # Use openSUSE Leap as the base image for the first stage (prep)
-FROM opensuse/leap:latest as prep
+FROM opensuse/tumbleweed:latest as prep
 
 # Set the locale-related environment variables to valid locales
 ENV LANG=en_US.UTF-8
@@ -25,7 +25,7 @@ RUN wget https://github.com/SoftEtherVPN/SoftEtherVPN_Stable/archive/v${BUILD_VE
     && rm v${BUILD_VERSION}.tar.gz
 
 # Continue with the second stage using openSUSE as the base image (build)
-FROM opensuse/leap:latest as build
+FROM opensuse/tumbleweed:latest as build
 
 # Copy the previously extracted SoftEtherVPN source code from the prep stage
 COPY --from=prep /usr/local/src /usr/local/src
@@ -46,7 +46,7 @@ RUN zypper --non-interactive in gcc make ncurses-devel libopenssl-devel readline
     && zip -r9 /artifacts.zip /usr/vpn* /usr/bin/vpn*
 
 # Continue with the final stage using openSUSE as the base image
-FROM opensuse/leap:latest
+FROM opensuse/tumbleweed:latest
 
 COPY --from=build /artifacts.zip /
 
