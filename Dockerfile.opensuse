@@ -1,8 +1,12 @@
 # Use openSUSE Leap as the base image for the first stage (prep)
 FROM opensuse/leap:latest as prep
 
-# Set the LANG environment variable to a valid locale
+# Set the locale-related environment variables to valid locales
 ENV LANG=en_US.UTF-8
+ENV LC_ALL=en_US.UTF-8
+ENV LC_CTYPE=en_US.UTF-8
+ENV LC_MESSAGES=en_US.UTF-8
+ENV LC_COLLATE=en_US.UTF-8
 
 LABEL maintainer="Tomohisa Kusano <siomiz@gmail.com>" \
       contributors="See CONTRIBUTORS file <https://github.com/siomiz/SoftEtherVPN/blob/master/CONTRIBUTORS>"
@@ -11,7 +15,7 @@ ENV BUILD_VERSION=4.39-9772-beta \
     SHA256_SUM=5c538e35e1639ce9a55a31be0b66af224462b84caf0ebf831f1e56efe6f9924a
 
 # Install required packages using zypper (openSUSE package manager)
-RUN zypper --non-interactive in wget tar gzip sha256sum
+RUN zypper --non-interactive in wget tar gzip coreutils zip unzip
 
 # Download and extract SoftEtherVPN source code
 RUN wget https://github.com/SoftEtherVPN/SoftEtherVPN_Stable/archive/v${BUILD_VERSION}.tar.gz \
@@ -27,9 +31,13 @@ FROM opensuse/leap:latest as build
 COPY --from=prep /usr/local/src /usr/local/src
 
 ENV LANG=en_US.UTF-8
+ENV LC_ALL=en_US.UTF-8
+ENV LC_CTYPE=en_US.UTF-8
+ENV LC_MESSAGES=en_US.UTF-8
+ENV LC_COLLATE=en_US.UTF-8
 
 # Install necessary build dependencies using zypper (openSUSE package manager)
-RUN zypper --non-interactive in gcc make ncurses-devel libopenssl-devel readline-devel zip zlib-devel \
+RUN zypper --non-interactive in gcc make ncurses-devel libopenssl-devel readline-devel zip zlib-devel unzip \
     && cd /usr/local/src/SoftEtherVPN_Stable-* \
     && ./configure \
     && make \
@@ -45,8 +53,12 @@ COPY --from=build /artifacts.zip /
 COPY copyables /
 
 ENV LANG=en_US.UTF-8
+ENV LC_ALL=en_US.UTF-8
+ENV LC_CTYPE=en_US.UTF-8
+ENV LC_MESSAGES=en_US.UTF-8
+ENV LC_COLLATE=en_US.UTF-8
 
-RUN zypper --non-interactive in bash iptables openssl-devel \
+RUN zypper --non-interactive in bash iptables openssl-devel zip unzip \
     && chmod +x /entrypoint.sh /gencert.sh \
     && unzip -o /artifacts.zip -d / \
     && rm /artifacts.zip \
