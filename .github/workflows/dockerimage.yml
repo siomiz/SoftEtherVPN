@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        tag: [alpine, debian, ubuntu]
+        tag: [alpine, debian, ubuntu, opensuse]
     steps:
     - 
       name: Checkout
