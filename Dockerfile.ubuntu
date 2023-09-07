@@ -3,8 +3,8 @@ FROM alpine:3.16 as prep
 LABEL maintainer="Tomohisa Kusano <siomiz@gmail.com>" \
       contributors="See CONTRIBUTORS file <https://github.com/siomiz/SoftEtherVPN/blob/master/CONTRIBUTORS>"
 
-ENV BUILD_VERSION=4.39-9772-beta \
-    SHA256_SUM=5c538e35e1639ce9a55a31be0b66af224462b84caf0ebf831f1e56efe6f9924a
+ENV BUILD_VERSION=4.42-9798-rtm \
+    SHA256_SUM=536980ae4aeeed5f27e51f5ea9b6e646b60c8223cc78a62eaec6b9838444368f
 
 RUN wget https://github.com/SoftEtherVPN/SoftEtherVPN_Stable/archive/v${BUILD_VERSION}.tar.gz \
     && echo "${SHA256_SUM}  v${BUILD_VERSION}.tar.gz" | sha256sum -c \
