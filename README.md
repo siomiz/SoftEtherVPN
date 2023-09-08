@@ -9,12 +9,12 @@
 
 ## Image Tags
 
-Base OS Image | Latest Bata ([v4.39-9772-beta](https://github.com/SoftEtherVPN/SoftEtherVPN_Stable/tree/v4.39-9772-beta)) | Base OS Image | Latest Stable ([v4.38-9760-rtm](https://github.com/SoftEtherVPN/SoftEtherVPN_Stable/tree/v4.38-9760-rtm)) |
-------------- | -- | -- | --
-`alpine:3.16` | **`:latest`**, `:alpine`, `:9772`, `:4.39`, `:9772-alpine`, `:4.39-alpine` | `alpine:3.14` | `:9760-alpine`, `:4.38-alpine`
-`debian:11-slim` | `:debian`, `:9772-debian`, `:4.39-debian` | `debian:10-slim` | `:9760-debian`, `:4.38-debian`
-`ubuntu:22.04` | `:ubuntu`, `:9772-ubuntu`, `:4.39-ubuntu` | `ubuntu:20.04` | `:9760-ubuntu`, `:4.38-ubuntu`
-\- | _`centos` is deprecated_ | `centos:8` | `:centos`, `:9760`, `:4.38`, `:9760-centos`, `:4.38-centos`
+Base OS Image | Latest Bata ([v4.43-9799-beta](https://github.com/SoftEtherVPN/SoftEtherVPN_Stable/tree/v4.43-9799-beta)) | Latest Stable ([v4.42-9798-rtm](https://github.com/SoftEtherVPN/SoftEtherVPN_Stable/tree/v4.42-9798-rtm)) |
+------------- | -- | --
+`alpine:3.16` | **`:latest`**, `:alpine`, `:9799`, `:4.43`, `:9799-alpine`, `:4.43-alpine` | `:9798-alpine`, `:4.42-alpine`
+`debian:11-slim` | `:debian`, `:9799-debian`, `:4.43-debian` | `:9798-debian`, `:4.42-debian`
+`ubuntu:22.04` | `:ubuntu`, `:9799-ubuntu`, `:4.43-ubuntu` | `:9798-ubuntu`, `:4.42-ubuntu`
+`opensuse/tumbleweed` | `:opensuse`, `:9799-opensuse`, `:4.43-opensuse` | `:9798-opensuse`, `:4.42-opensuse`
 
 ## Setup
  - L2TP/IPSec PSK + OpenVPN
