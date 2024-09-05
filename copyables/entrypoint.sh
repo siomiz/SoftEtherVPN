@@ -1,6 +1,9 @@
 #!/bin/bash
 set -e
 
+VPNCMD=/usr/local/bin/vpncmd
+VPNSERVER=/usr/local/bin/vpnserver
+
 if [ "$*" == "gencert" ]; then
 
   /gencert.sh
@@ -50,14 +53,14 @@ printf '=%.0s' {1..24}
 echo
 
 vpncmd_server () {
-  /usr/bin/vpncmd localhost /SERVER /CSV /CMD "$@"
+  ${VPNCMD} localhost /SERVER /CSV /CMD "$@"
 }
 
 vpncmd_hub () {
-  /usr/bin/vpncmd localhost /SERVER /CSV /HUB:DEFAULT /CMD "$@"
+  ${VPNCMD} localhost /SERVER /CSV /HUB:DEFAULT /CMD "$@"
 }
 
-/usr/bin/vpnserver start 2>&1 > /dev/null
+${VPNSERVER} start 2>&1 > /dev/null
 
 # while-loop to wait until server comes up
 # switch cipher
@@ -71,7 +74,7 @@ done
 
 # About command to grab version number
 # /usr/bin/vpncmd localhost /SERVER /CSV /CMD About | head -2 | tail -1 | sed 's/^/# /;'
-vpncmd_server About | head -2 | tail -1 | sed 's/^/# /;'
+vpncmd_server About | head -3 | tail -1 | sed 's/^/# /;'
 
 # enable L2TP_IPsec
 vpncmd_server IPsecEnable /L2TP:yes /L2TPRAW:yes /ETHERIP:no /PSK:${PSK} /DEFAULTHUB:DEFAULT
@@ -84,7 +87,10 @@ vpncmd_hub SecureNatEnable
 vpncmd_hub NatSet /MTU:$MTU /LOG:no /TCPTIMEOUT:3600 /UDPTIMEOUT:1800
 
 # enable OpenVPN
-vpncmd_server OpenVpnEnable yes /PORTS:1194
+# vpncmd_server OpenVpnEnable yes /PORTS:1194
+# new command for 5 via https://github.com/SoftEtherVPN/SoftEtherVPN/discussions/1882
+vpncmd_server ProtoOptionsSet OpenVPN /NAME:Enabled /VALUE:True
+vpncmd_server PortsUDPSet 1194
 
 # set server certificate & key
 if [[ -f server.crt && -f server.key ]]; then
@@ -175,7 +181,7 @@ vpncmd_hub SetHubPassword ${HPW}
 : ${SPW:=$(cat /dev/urandom | tr -dc 'A-Za-z0-9' | fold -w 20 | head -n 1)}
 vpncmd_server ServerPasswordSet ${SPW}
 
-/usr/bin/vpnserver stop 2>&1 > /dev/null
+${VPNSERVER} stop 2>&1 > /dev/null
 
 # while-loop to wait until server goes away
 set +e
