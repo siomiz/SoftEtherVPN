@@ -65,9 +65,7 @@ jobs:
       with:
         images: siomiz/softethervpn
         tags: |
-          type=raw,value=${{ matrix.tag }}
           type=raw,value=${{ env.SE_VERSION }}-${{ matrix.tag }}
-          type=raw,value=latest,enable=${{ matrix.tag == 'alpine' }}
           type=raw,value=${{ env.SE_VERSION }},enable=${{ matrix.tag == 'alpine' }}
     - 
       name: Buildx and push Docker image
